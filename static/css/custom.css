@@ -1,0 +1,253 @@
+#menu{
+	position:fixed;
+}
+.oswald-bold{
+	font-family:Oswald;
+	font-weight:400!important;
+}
+input[type=text], input[type=password], select{
+	height:30px;
+	padding-left: 15px;
+	border-radius: 7px;
+	border-color: rgb(240, 231, 234);
+	font-family: Arial;
+	box-shadow: 0px;
+	color: rgb(124, 117, 117);
+	font-style: italic;
+	width:255px;
+}
+input[type=text]:focus, input[type=password]:focus{
+	box-shadow: 2px 2px 5px 3px #E2E2E2;
+}
+select{
+	padding:4px 10px;
+}
+input[type=submit], input[type=button]{
+	cursor: pointer;
+	margin: 3px;
+	background-color: #EE7701;
+	padding: 4px 32px;
+	border: solid #F6D095 2px;
+	border-radius: 5px;
+	text-decoration: none;
+	color: #fff;
+	font: 12px Oswald;
+	text-align: center;
+}
+button[type=submit].btn, button[type=button].btn{
+	border-radius: 0px;
+	margin: 4px 4px 4px 0px;
+	font-family: oswald;
+	box-shadow: 2px 2px 2px rgb(83, 98, 146);
+}
+td{
+	text-align:center;
+	padding:5px 10px;
+}
+#loginDiv{
+	float:left;
+	margin-left:15%;
+	position: relative;
+	box-shadow: 10px 10px 25px #EEE8E8;
+	padding: 25px;
+	border: solid 1px #E4DDDD;
+	z-index:1;
+}
+#registerDiv{
+	float:right;
+	margin-right:15%;
+	position: relative;
+	box-shadow: 10px 10px 25px #EEE8E8;
+	padding: 25px;
+	border: solid 1px #E4DDDD;
+	z-index:1;
+}
+#forgotPassDiv{
+	position: relative;
+	padding: 0px;
+	z-index:1;
+	border-top: solid 1px rgb(224, 224, 224);
+	padding-top: 8px;
+	margin-top:5px;
+}
+#forgotPassDiv td{
+	padding: 4px;  	
+}
+#bgDiv {
+  background: url('../images/bg1.jpg');
+  background-size:cover;
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;   
+}
+#whiteBgDiv {
+  background: #fff;
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;   
+}
+form{
+  margin:0px;
+}
+.container{
+	width:auto!important;
+	margin-left:20px;
+}
+#menu{
+	height:100%;
+}
+.read-tab-content, .editAcivityFormDiv, .documentsDiv{
+	margin:5px 10px;
+}
+.read-tab-content table, .editAcivityFormDiv table, .documentsDiv table{
+	width:100%;
+}
+.read-tab-content td, .editAcivityFormDiv td, .documentsDiv td{
+	padding:5px 10px;
+	border:solid 1px #F0E2E2;
+	font-size:12px;
+	text-align:justify;
+}
+.editAcivityFormDiv textarea{
+	font-family: oswald;
+	color: #4d4d4d;
+	width: 100%;
+	border: none;
+}
+.editAcivityFormDiv input[type=text]{
+	padding:12px;
+	color:#5D4949;
+}
+.detail-writeup-left{
+	width:75%;
+	float:left;
+}
+.detail-writeup-right{
+	width:25%;
+	min-width:175px;
+	float:left;
+}
+.detail-writeup-right img{
+	border:solid 1px rgb(112, 100, 100);
+	width:175px;
+}
+.edit-activity-btn div{
+	background:url('../../media/images/edit.png');	
+	width: 25px;
+	height: 25px;
+	background-size: cover;
+	cursor:pointer;
+	float:left;
+	margin:-3px 2px auto -3px;	
+}
+.edit-activity-btn{
+	width: 55px;
+	height: 29px;
+	border: solid 1px grey;
+	cursor: pointer;
+	text-align: center;
+	padding: 4px;
+	margin-top: 4px;
+	box-shadow:2px 2px 1px;
+}
+.edit-activity-btn:hover{
+	box-shadow:2px 2px 1px #37a6cd;
+}
+.divHeading1 {
+	font-family: oswald;
+	font-size: 14px;
+	width: 100%;
+	padding: 4px;
+	background: #2085A8;
+	color:#fff;
+	margin: 15px 0px 5px 0px;
+}
+.divHeading2 {
+	font-family: oswald;
+	font-size: 14px;
+	width: 100%;
+	padding: 4px;
+	background: #E9E9E9;
+	margin: 15px 0px 5px 0px;
+}
+.delete-doc-link{
+	color: #fff;
+	background: rgb(224, 55, 55);
+	padding: 2px 8px;
+	box-shadow: 2px 2px 2px rgb(128, 42, 45);
+}
+.delete-doc-link:hover{
+	text-decoration:none;
+}
+.messageGlobal{
+	background: rgb(240, 112, 112);
+	padding: 5px;
+	margin:2px 0px 5px 0px;
+}
+.messageTeam{
+	background: red;
+	padding: 5px;
+	margin:2px 0px 5px 0px;
+	background: rgb(241, 234, 234);
+}
+.messagePersonal{
+	background: rgb(189, 189, 245);
+	padding: 5px;
+	margin:2px 0px 5px 0px;
+}
+.receivedMessage{
+	text-align:right;
+}
+.sentMessage{
+	text-align:left;	
+}
+#MessageDiv p{
+	border-top: solid 1px #fff;
+	margin: 0px;
+	margin-top: 5px;
+	padding-top: 2px;
+}
+.messageContainer{
+	height:200px;
+	overflow:scroll;
+}
+.alert{
+	margin:10px;
+}
+#UpdateDiv, #UpdatePasswordDiv, #updateProfilePic{
+	margin: 5px 10px;
+	padding: 10px;
+	border: solid 1px #F0E2E2;
+}
+#UpdateDiv table, #UpdatePasswordDiv table, #updateProfilePic table{
+	width: 100%;
+}
+#UpdateDiv td, #UpdatePasswordDiv td, #updateProfilePic td{
+	border: solid 1px rgb(248, 237, 237)
+}
+.form-horizontal .controls{
+	margin-left:0px;
+}
+.form-horizontal .control-group{
+	margin-bottom: 0px;
+}
+.form-horizontal .control-label{
+	float: inherit;
+	width:auto;
+}
+.headerPPic{	
+	position: absolute;
+	margin-left: 210px;
+	height: 100px;
+	width: auto;
+	max-width: 135px;
+	border: solid 1px rgb(110, 109, 109);
+}
