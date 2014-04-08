@@ -21,8 +21,9 @@ class Club( models.Model ):
 class Project( models.Model, Tagged ):
 
 	club = models.ForeignKey( Club , related_name = 'parent_club' )
+	brief = models.CharField( max_length = 400 )
 	name = models.CharField( max_length = 100 )
-	desc = models.CharField( max_length = 1000 )
+	desc = models.CharField( max_length = 2000 )
 	status = models.CharField( max_length = 1000 )
 	users = models.ManyToManyField( User , related_name = 'project_member' )
 	mentors = models.ManyToManyField( User, related_name = 'project_mentor' )
