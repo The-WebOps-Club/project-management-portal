@@ -11,3 +11,6 @@ class UserProfile( models.Model ):
 	expertise = models.CharField( max_length = 2500)
 	sm_url = models.CharField( max_length = 500)
 	pic = models.ImageField( upload_to = 'media/user_pics/')
+
+	def __unicode__(self):
+		return self.user.username
