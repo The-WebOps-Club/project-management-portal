@@ -41,7 +41,9 @@ INSTALLED_APPS = (
     'project',
     'search',
     'userprofile',
-    'south'
+    'south',
+    'dajaxice',
+    'PIL',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -74,6 +76,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = SITE_URL + 'static/'
+MEDIA_URL = SITE_URL + 'media/'
 
 STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
@@ -91,6 +94,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
+)
+
+MEDIA_ROOT = (
+    os.path.join(BASE_DIR, "media"),
 )
 
 TEMPLATE_DIRS = (
