@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 class UserProfile( models.Model ):
 
 	user = models.ForeignKey( User )
-	timestamp = models.DateTimeField( auto_now_add = 'true' )
 	description = models.CharField( max_length = 2500)
 	ph_num = models.CharField( max_length = 13)
 	hostel = models.CharField( max_length = 30)

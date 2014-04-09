@@ -43,7 +43,6 @@ INSTALLED_APPS = (
     'userprofile',
     'south',
     'dajaxice',
-    'PIL',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -72,13 +71,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
-
-STATIC_URL = SITE_URL + 'static/'
-MEDIA_URL = SITE_URL + 'media/'
-
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
@@ -92,9 +84,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'p_manage.context_processors.static_url',
 )
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-)
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.6/howto/static-files/
+
+STATIC_URL = SITE_URL + 'static/'
+MEDIA_URL = SITE_URL + 'media/'
+
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
 MEDIA_ROOT = (
     os.path.join(BASE_DIR, "media"),
