@@ -1,6 +1,7 @@
-*.pyc
-
-db.sqlite3
-
+*.py[cod]
 local_settings.py
-mydatabase
+*.py~
+db.sqlite3
+media/
+cache/
+

@@ -1,5 +1,5 @@
 {%extends 'base.html'%}
-<!-- Not yet complete. TODO: change layout to a card structure -->
+<!-- Supposedly complete. TODO: change layout to a card structure -->
 
 <!-- Context Mixins -->
 <!-- 
@@ -20,7 +20,7 @@
 		</tr>
 		<tr>
 		<td colspan="2">
-				<div class="brief-writeup"><p class="text" id="1395992530932_clone"></p></div>
+				<div class="brief-writeup"><p class="text" id="1395992530932_clone">{{project.brief}}</p></div>
 			</td>
 		</tr>
 		<tr>
@@ -35,16 +35,23 @@
 		</tr>
 		<tr>
 			<td><strong>Status: </strong></td>
-			<td><strong>Tags: </strong>Underwater, Robotics, Ocean Technology</td>
+			<td><strong>Tags: </strong>
+			{%for tag in project.tags%}
+				{{tag.label}},
+			{%endfor%}
+
+			</td>
 		</tr>
 		<!--<tr> Removed as per reviewed design structure.
 			<td><strong>Overall Budget: </strong>950000</td>
 			<td><strong>Utilized Budget: </strong>55000</td>
 		</tr>-->
 	</tbody></table>
+	{%if user|allow_project_edit%}
 	<div class="edit-activity-btn"><div></div>Edit</div>
+	{%endif%}
 </div>
-
+{%if user|allow_project_edit%}
 <div class="editAcivityFormDiv" style="display: none;">
 
 	<form name="update_activity" class="form-horizontal" action="index.php?action=update_activity" method="POST" enctype="multipart/form-data">
@@ -56,12 +63,12 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<div class="brief-writeup"><textarea class="input-xlarge" id="textarea" rows="2" name="brief_writeup">This is the first time students from IITM are participating in this competition. The team was formed in May 2012 &amp; students stayed back in summer to work on the project. Currently, a manually controlled underwater vehicle has been built and is being tested in the basin available in Department of Naval Architecture &amp; Ocean Engineering for further improvements. Work on other sub-systems is on as well. </textarea></div>
+				<div class="brief-writeup"><textarea class="input-xlarge" id="textarea" rows="2" name="brief_writeup">{{project.brief}} </textarea></div>
 			</td>
 		</tr>
 		<tr>
 		<td colspan="2">
-			<div class="detail-writeup-left"><textarea class="input-xlarge" id="textarea" rows="6" name="detailed_writeup">AMOGH is the first underwater vehicle being developed by a group of undergraduate students at IIT Madras. Starting in July 2012 after successfully testing a ROV, the concept design of the vehicle has been evolved to that of an AUV. The design has been customized iteratively to help complete the tasks defined in the RoboSub competition. The proposed design is a modular hydrodynamic dual hull design with a larger top hull and a bottom hull mounted on a skeletal frame, constructed using an intelligent choice of Aluminium. Temporary sealing is done using O-Ring face seals whereas anaerobic sealants are used for permanent sealing. The control is established using image processing that feeds from two on-board cameras and orientation data from an IMU. A powerful dual core atom processor D2700 does the required processing and an Arduino Mega2560 acts as the interface between the CPU and the payloads. Sensing solutions include a pressure sensor, an IMU, two on board cameras and leak sensors. Propulsion system consists of 5 thrusters powered using a bank of Lithium Polymer batteries. One motor controller for each thruster permits differential control navigation. Pneumatics based mechanisms have been designed for problem statement specific tasks like torpedo shooting and marker dropping.</textarea></div>
+			<div class="detail-writeup-left"><textarea class="input-xlarge" id="textarea" rows="6" name="detailed_writeup">{{project.desc}}</textarea></div>
 			<div class="detail-writeup-right">
 				<center>
 					<img src="upload/ActivityImages/bgimages/AUV Pic.jpg">
@@ -71,12 +78,17 @@
 		</tr>
 		<tr>
 			<td><strong>Status: </strong></td>
-			<td><strong>Tags: </strong><input type="text" class="input-xlarge" name="tags" value="Underwater, Robotics, Ocean Technology" id="input01"></td>
+			<td><strong>Tags: </strong><input type="text" class="input-xlarge" name="tags" value="
+			{%for tag in project.tags%}
+				{{tag.label}},
+			{%endfor%}
+			" id="input01"></td>
 		</tr>
-		<tr>
+		<!-- Removed on demand -->
+		<!--<tr>
 			<td><strong>Overall Budget: </strong><input type="text" class="input-xlarge" name="overall_budget" value="950000"></td>
 			<td><strong>Utilized Budget: </strong><input type="text" class="input-xlarge" name="utilized_budget" value="55000"></td>
-		</tr>
+		</tr>-->
 		<tr>
 			<td><strong>Icon: </strong><input type="file" name="icon" id="exampleInputFile"></td>
 			<td><strong>BG Image: </strong><input type="file" name="bgImg" id="exampleInputFile"></td>
@@ -86,6 +98,7 @@
 	<button type="button" class="btn btn-primary close-edit-activity-btn">Back</button>
 	</form>
 </div>
+{%endif%}
 
 <div class="documentsDiv">	
 	<!-- Documents Secction -->
@@ -114,7 +127,7 @@
 </tbody></table>
 
 <div class="divHeading2">Upload a new document</div>
-<form name="addDocument" action="index.php?action=uploadDocument" enctype="multipart/form-data" method="POST">
+<form name="addDocument" action="#" enctype="multipart/form-data" method="POST">
 	<table>
 		<tbody><tr>
 			<td><strong>File:</strong> <input type="file" name="docName"></td>
