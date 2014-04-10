@@ -25,10 +25,10 @@ class Project( models.Model, Tagged ):
 	name = models.CharField( max_length = 100 )
 	desc = models.CharField( max_length = 2000 )
 	status = models.CharField( max_length = 1000 )
-	users = models.ManyToManyField( User , related_name = 'project_member' )
-	mentors = models.ManyToManyField( User, related_name = 'project_mentor' )
+	users = models.ManyToManyField( User , related_name = 'project_member' , blank='true', null='true')
+	mentors = models.ManyToManyField( User, related_name = 'project_mentor' , blank='true', null='true')
 	budget = models.CharField( max_length = 10 )
-	documents = models.ManyToManyField( Document )
+	documents = models.ManyToManyField( Document , blank='true', null='true')
 
 	def __unicode__( self ):
 		return self.name

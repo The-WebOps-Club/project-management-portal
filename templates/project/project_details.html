@@ -1,16 +1,17 @@
 {%extends 'base.html'%}
 <!-- Supposedly complete. TODO: change layout to a card structure -->
 
-<!-- Context Mixins -->
+<!-- Context Requiurements -->
 <!-- 
-	ProjectDetailView(GET only)
+	Project details as project
 	ProjectEditView(POST only)
-	User Details(contrib.auth context processor)
-	TaskListView
-	UpdateListView
-	DocumentListView
+	User Details(contrib.auth context processor) as user
+	task list as task_list
+	update list as update_list
+	documents list as documents
 -->
-
+{%block html_title%}{{project.name}}{%endblock%}
+{%block title%}{{project.name}}{%endblock%}
 {%block content%}
 <div class="read-tab-content" style="display: block;">
 	<table>
@@ -34,11 +35,9 @@
 		</td>
 		</tr>
 		<tr>
-			<td><strong>Status: </strong></td>
+			<td><strong>Status: </strong>  &nbsp;&nbsp;{{project.status}}</td>
 			<td><strong>Tags: </strong>
-			{%for tag in project.tags%}
-				{{tag.label}},
-			{%endfor%}
+			
 
 			</td>
 		</tr>
@@ -47,11 +46,11 @@
 			<td><strong>Utilized Budget: </strong>55000</td>
 		</tr>-->
 	</tbody></table>
-	{%if user|allow_project_edit%}
+	{%if allow_project_edit%}
 	<div class="edit-activity-btn"><div></div>Edit</div>
 	{%endif%}
 </div>
-{%if user|allow_project_edit%}
+{%if allow_project_edit%}
 <div class="editAcivityFormDiv" style="display: none;">
 
 	<form name="update_activity" class="form-horizontal" action="index.php?action=update_activity" method="POST" enctype="multipart/form-data">
@@ -79,9 +78,7 @@
 		<tr>
 			<td><strong>Status: </strong></td>
 			<td><strong>Tags: </strong><input type="text" class="input-xlarge" name="tags" value="
-			{%for tag in project.tags%}
-				{{tag.label}},
-			{%endfor%}
+			
 			" id="input01"></td>
 		</tr>
 		<!-- Removed on demand -->
@@ -120,7 +117,7 @@
 		<td>{{doc.user.username}}</td>
 		<td>{{doc.timestamp}}</td>
 		<td class="file-tag" id="1395992530936" style="display: table-cell;">{{doc.desc}}</td>
-		<td><a class="delete-doc-link" href="{{url 'project:deletefile' doc.pk}}">Delete</a></td>
+		<td><a class="delete-doc-link" href="#">Delete</a></td>
 	</tr>
 	{%endfor%}
 
@@ -178,3 +175,4 @@
 		$('.editAcivityFormDiv').fadeOut(0);
 	});
 </script>
+{%endblock%}

@@ -11,7 +11,8 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url( r'^admin/', include(admin.site.urls)),
-    url( r'^$', TemplateView.as_view( template_name = 'base.html' ) ),
+    url( r'^$', TemplateView.as_view( template_name = 'base.html' ) ), # testing base template. to be replaced with index.html soon.
+    url( r'^', include('project.urls', namespace = 'project' ) )
 )
 
 urlpatterns += patterns('django.views.static', (r'^static/(?P<path>.*)$'

@@ -1,0 +1,26 @@
+{%extends 'base.html'%}
+<!-- Supposedly complete. TODO: change layout to a card structure -->
+
+<!-- Context Mixins -->
+<!-- 
+	ProjectList as project_list
+	Page Title as page_title (since the same view can be used both for All Projects and My Projects.)
+	User Details(contrib.auth context processor)
+-->
+{%block title%}{{page_title}}{%endblock%}
+{%block html_title%}{{page_title}}{%endblock%}
+{%block content%}
+{%for project in project_list%}
+	<div class='col-md-10 col-md-offset-1 project-list-element'>
+		<h3> <a href='{% url "project:project_detail" project.pk %}'>{{project.name}}</a>  <small>{{project.club.name}}</small></h3> 
+		<p>{{project.brief}}</p>
+	</div>
+{%endfor%}
+<style>
+	.project-list-element{
+		border-left:5px rgb(55, 166, 205) solid;
+		padding-top:5px;
+		padding-bottom:5px;
+	}
+</style>
+{%endblock%}

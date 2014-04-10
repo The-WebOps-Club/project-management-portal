@@ -1,11 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404, render_to_response
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.core.exceptions import PermissionDenied
-from project.models import Update, Project, Task, Club
+from project.models import Update, Project, Task, Club, Comment, Document
 from project.permissions import PermissionHandler
-
+from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
 
 
 # curently using class-based views for cleaner code.
@@ -50,7 +51,7 @@ class CreateClub( CreateView ):
 
 	def form_valid( self, form ):
 		if( not PermissionHandler.create_club(self.request.user, **self.kwargs ) ): # check for permission using the permissions module.
-			raise PermissionDenied( 'You do NOT have permission to make a task :P' ) 
+			raise PermissionDenied( 'You do NOT have permission to make a club :P' ) 
 		return super( CreateProject, self ).form_valid( form )
 
 class CreateComment( CreateView ):
@@ -59,7 +60,7 @@ class CreateComment( CreateView ):
 
 	def form_valid( self, form ):
 		if( not PermissionHandler.create_comment(self.request.user, **self.kwargs ) ): # check for permission using the permissions module.
-			raise PermissionDenied( 'You do NOT have permission to make a task :P' ) 
+			raise PermissionDenied( 'You do NOT have permission to make a comment :P' ) 
 
 		form.instance.user = self.request.user 
 		if( self.kwargs['target_model'] == 'Update'):
@@ -81,7 +82,7 @@ class MyProjectsListView( ListView ):
 
 	def get_queryset(self, *args,**kwargs):
 		qs = super(MyProjectsListView, self).get_queryset(*args,**kwargs)
-		qs.filter( users__in = self.request.user )
+		qs.filter( users__in = [self.request.user] )
 		return qs
 
 	def get_context_data( self ):
@@ -97,3 +98,37 @@ class AllProjectsListView( ListView ):
 		ctx = super(AllProjectsListView, self).get_context_data()
 		ctx['page_title'] = 'All Projects'
 		return ctx
+
+
+"""
+	driver function for the project details view.
+"""
+@login_required
+def project_detail_view( request, *args, **kwargs ):
+	# putting together the required context.
+	if request.method == 'GET':
+	# very basic implementation.
+		ctx = { }
+		ctx['project'] = get_object_or_404( Project, pk = kwargs['project'] )
+		ctx['task_list'] = Task.objects.filter( parent = ctx['project'] )
+		ctx['update_list'] = Update.objects.filter( parent = ctx['project'] )
+		ctx['documents'] = Document.objects.filter( project = ctx['project'] )
+		ctx['allow_project_edit'] = 1
+		return render_to_response( 'project/project_details.html', ctx, context_instance = RequestContext(request) )
+
+	elif request.method == 'POST':
+		return HttpResponse('Method inapplicable')
+	# user is automatically added by default context processor.
+
+@login_required
+def project_update( request, *args, **kwargs ):
+
+	if not PermissionHandler.edit_project( request.user, project = kwargs['project'] ):
+		return PermissionDenied('You are not allowed to edit!')
+
+	project = get_object_or_404( Project, pk = kwargs['project'] )
+
+@login_required
+def upload_document( request, *args, **kwargs ):
+
+	pass

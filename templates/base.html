@@ -3,24 +3,25 @@
 <!--[if IE 8]>
 <html xmlns="http://www.w3.org/1999/xhtml" class=""  lang="en-US">
 <![endif]-->
+{%load staticfiles%}
 <!--[if !(IE 8) ]><!-->
 <html xmlns="http://www.w3.org/1999/xhtml" class=""  lang="en-US">
 <!--<![endif]-->
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Home | {{user.first_name}} {{user.last_name}} | CFI Projects Management Portal</title>
+		<title>{%block title%} {%endblock%} | {{user.first_name}} {{user.last_name}} | CFI Projects Management Portal</title>
         
-        <link rel="stylesheet" type="text/css" href="static/css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="static/css/glyphicons.css">
-        <link rel="stylesheet" type="text/css" href="static/css/style.css">
-        <link rel="stylesheet" type="text/css" href="static/css/custom.css">
-        <script src="static/javascript/jquery-1.11.0.min.js"></script>
-        <script src="static/javascript/jquery.slimscroll.min.js"></script>
-        <script src="static/javascript/jquery.cmtextconstrain.js"></script>
-        <script src="static/javascript/custom.js"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+        <link rel="stylesheet" type="text/css" href="{%static 'css/bootstrap.min.css'%}">
+        <link rel="stylesheet" type="text/css" href="{%static 'css/glyphicons.css'%}">
+        <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
+        <link rel="stylesheet" type="text/css" href="{%static 'css/custom.css'%}">
+        <script src="{%static 'javascript/jquery-1.11.0.min.js'%}"></script>
+        <script src="{%static 'javascript/jquery.slimscroll.min.js'%}"></script>
+        <script src="{%static 'javascript/jquery.cmtextconstrain.js'%}"></script>
+        <script src="{%static 'javascript/custom.js'%}"></script>
 		<!--<script src="static/javascript/bootstrap.js"></script> -->
-        <script src="static/javascript/bootstrap.min.js"></script>
+        <script src="{%static 'javascript/bootstrap.min.js'%}"></script>
 		<link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
 	
 	
@@ -52,7 +53,7 @@
 																<ul class="dropdown-menu" style="width:350px">  
                                     <img class="headerPPic" src="upload/ProfilePics/14.jpg">
                                     <li>
-										<a href="#">{{user.first_name}} {{user.last_name}}</a>
+										<a href="#">{{user.first_name}} {{user.last_name}} aka. {{user.username}}</a>
 									</li> 
 									<li>
 										<a href="#" style="padding-left: 30px; font-size: 12px;">{{user.email}}</a>
@@ -112,10 +113,10 @@
 				<ul>
 					<li class="heading"><span>Memberships</span></li>
 					<li class="hasSubmenu">
-						<a data-toggle="collapse" class="glyphicons wrench" href="#menu_projects"><span>Projects</span></a>
+						<a data-toggle="collapse" class="glyphicons settings" href="#menu_projects"><span>Projects</span></a>
 						<ul class="menuCollapse" id="menu_projects">
-							<li class=""><a href="#"><span>All Projects</span></a></li>
-							<li class=""><a href="#"><span>My Projects</span></a></li>
+							<li class=""><a href="{% url 'project:project_all' %}"><span>All Projects</span></a></li>
+							<li class=""><a href="{% url 'project:project_self'%}"><span>My Projects</span></a></li>
 						</ul>
 					</li>
 					<!--<li class="glyphicons notes"><a href="javascript:update_content('Projects');"><span>Projects</span></a></li>-->
