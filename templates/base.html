@@ -52,16 +52,16 @@
 																<ul class="dropdown-menu" style="width:350px">  
                                     <img class="headerPPic" src="upload/ProfilePics/14.jpg">
                                     <li>
-										<a href="#">Vineet Upadhyay </a>
+										<a href="#">{{user.first_name}} {{user.last_name}}</a>
 									</li> 
 									<li>
-										<a href="#" style="padding-left: 30px; font-size: 12px;">mail@example.com</a>
+										<a href="#" style="padding-left: 30px; font-size: 12px;">{{user.email}}</a>
 									</li>  
 									<li>
-										<a href="javascript:update_content('updateForm');">Settings</a>
+										<a href="#">Settings</a>
 									</li>  
 									<li>
-										<a href="index.php?action=logout">Logout</a>
+										<a href="#">Logout</a>
 									</li>
                                </ul> 
 															  </li>  
@@ -95,8 +95,8 @@
 					<li class="hasSubmenu">
 						<a data-toggle="collapse" class="glyphicons group" href="#menu_account"><span>My Account</span></a>
 						<ul class="menuCollapse" id="menu_account">
-							<li class=""><a href="javascript:update_content('updateForm');"><span>Edit account</span></a></li>
-							<li class=""><a href="index.php?action=logout"><span>Logout</span></a></li>
+							<li class=""><a href="#"><span>Edit account</span></a></li>
+							<li class=""><a href="#"><span>Logout</span></a></li>
 						</ul>
 					</li>
 					<li class="hasSubmenu">

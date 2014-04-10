@@ -68,3 +68,32 @@ class CreateComment( CreateView ):
 			Task.objects.filter( pk = self.kwargs['task'] )[0].comments.add( form.instance )
 
 		return super( CreateProject, self ).form_valid( form )
+
+
+class MyProjectsListView( ListView ):
+	template_name = 'project/project_list.html'
+	context_object_name = 'project_list'
+	model = Project
+
+	def get(self, request,*args,**kwargs):
+		if not request.user.is_authenticated():				# check for authentication
+			return PermissionDenied('You\'re not logged in.')	
+
+	def get_queryset(self, *args,**kwargs):
+		qs = super(MyProjectsListView, self).get_queryset(*args,**kwargs)
+		qs.filter( users__in = self.request.user )
+		return qs
+
+	def get_context_data( self ):
+		ctx = super(AllProjectsListView, self).get_context_data()
+		ctx['page_title'] = 'My Projects'
+		return ctx
+
+class AllProjectsListView( ListView ):
+	template_name = 'project/project_list.html'
+	context_object_name = 'project_list'
+	model = Project
+	def get_context_data( self ):
+		ctx = super(AllProjectsListView, self).get_context_data()
+		ctx['page_title'] = 'All Projects'
+		return ctx
