@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 class Document( models.Model, Tagged ):
 
 	name = models.CharField( max_length = 100 )
-	desc = models.CharField( max_length = 1000 )
+	user = models.ForeignKey( User )
+	desc = models.CharField( max_length = 300 )
 	doc = models.FileField( upload_to = 'filebase' )
 	timestamp = models.DateTimeField( auto_now_add = 'true' )
 
@@ -29,6 +30,7 @@ class Project( models.Model, Tagged ):
 	mentors = models.ManyToManyField( User, related_name = 'project_mentor' , blank='true', null='true')
 	budget = models.CharField( max_length = 10 )
 	documents = models.ManyToManyField( Document , blank='true', null='true')
+	image = models.ImageField( upload_to='repository' )
 
 	def __unicode__( self ):
 		return self.name

@@ -128,7 +128,23 @@ def project_update( request, *args, **kwargs ):
 
 	project = get_object_or_404( Project, pk = kwargs['project'] )
 
+	try:
+		project.desc = request.POST['detailed_writeup']
+		project.brief = request.POST['brief_writeup']
+		project.status = request.POST['status']
+		project.name = request.POST['title']
+		project.image = request.POST['bgimg']
+		project.save()
+	except ValueError as e:	# implement a form clean mechanism here.
+		raise PermissionDenied('Error')
+
+	return redirect( reverse('project:project_detail', kwargs['project']) )
+
 @login_required
 def upload_document( request, *args, **kwargs ):
+	if not PermissionHandler.edit_project( request.user, project = kwargs['project'] ):
+		return PermissionDenied('You are not allowed to upload to this project!')
 
-	pass
+	d = Document( project = get_object_or_404( Project, pk = kwargs['project'] ), doc = request.POST['document'], user = request.user, desc = request.POST['desc'] )
+	d.save()
+	return redirect( reverse('project:project_detail', kwargs['project']) )
