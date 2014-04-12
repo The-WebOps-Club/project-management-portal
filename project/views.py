@@ -113,7 +113,21 @@ def project_detail_view( request, *args, **kwargs ):
 		ctx['task_list'] = Task.objects.filter( parent = ctx['project'] )
 		ctx['update_list'] = Update.objects.filter( parent = ctx['project'] )
 		ctx['documents'] = Document.objects.filter( project = ctx['project'] )
-		ctx['allow_project_edit'] = 1
+		if Update.objects.filter( parent = ctx['project'] ).count():
+			ctx['no_updates'] = 0
+		else:
+			ctx['no_updates'] = 1
+
+		if Task.objects.filter( parent = ctx['project'] ).count():
+			ctx['no_tasks'] = 0
+		else:
+			ctx['no_tasks'] = 1
+
+		if not PermissionHandler.edit_project( request.user, project = kwargs['project'] ):
+			ctx['allow_project_edit'] = 0
+		else:
+			ctx['allow_project_edit'] = 1
+
 		return render_to_response( 'project/project_details.html', ctx, context_instance = RequestContext(request) )
 
 	elif request.method == 'POST':
