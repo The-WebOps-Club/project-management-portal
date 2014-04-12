@@ -24,3 +24,8 @@ urlpatterns += patterns('django.views.static', (r'^static/(?P<path>.*)$'
                         , 'serve',
                         {'document_root': settings.STATIC_ROOT,
                         'show_indexes': True}))
+
+urlpatterns += patterns('django.views.static', (r'^media/(?P<path>.*)$'
+                        , 'serve',
+                        {'document_root': settings.MEDIA_ROOT,
+                        'show_indexes': True}))

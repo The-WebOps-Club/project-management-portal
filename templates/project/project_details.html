@@ -29,7 +29,7 @@
 			<div class="detail-writeup-left"><p class="text" id="1395992530922_clone">{{project.desc}}<a href="javascript:void(0);" class="cmConstrain " title="Show Less">[ Less ]</a></p></div>
 			<div class="detail-writeup-right">
 				<center>
-					<img src="upload/ActivityImages/bgimages/AUV Pic.jpg">
+					<img src="{{project.image.url}}">
 				</center>
 			</div>
 		</td>
@@ -70,7 +70,7 @@
 			<div class="detail-writeup-left"><textarea class="input-xlarge" id="textarea" rows="6" name="detailed_writeup">{{project.desc}}</textarea></div>
 			<div class="detail-writeup-right">
 				<center>
-					<img src="upload/ActivityImages/bgimages/AUV Pic.jpg">
+					<img src="{{project.image.url}}">
 				</center>
 			</div>
 		</td>
@@ -137,7 +137,7 @@
 </form>
 
 <div class="col-md-4 col-md-offset-1">
-	<h3>Updates</h3>
+	<h6 class='divHeading1' style="text-align:center">Updates</h6>
 	{%for update in update_list%}
 		<div class="col-md-12">
 			<div class="col-md-2">
@@ -149,14 +149,17 @@
 			</div>
 		</div>
 	{%endfor%}
+	{%if no_updates%}
+		<div class='text-success'> You have no Updates </div>
+	{%endif%}
 	<form method="POST" action="new_update/">
-	<div><input type='text'></input></div>
-
+	<div><input type='text' name='title' style="width:100%" placeholder="Enter Title"></input></div>
+	<div><textarea type='text' name='content' rows='4' style="width:100%" placeholder="Enter Content"></textarea></div><br>
 	<div><button class="btn btn-primary">Post Update</button></div>
 	</form>
 </div>
-<div class="col-md-4 col-md-offset-7">
-	<h3>Tasks</h3>
+<div class="col-md-4 col-md-offset-2">
+	<h6 class='divHeading1' style="text-align:center">Tasks</h6>
 	{%for task in task_list%}
 		<div class="col-md-12">
 			

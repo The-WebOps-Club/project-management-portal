@@ -19,6 +19,18 @@ input[type=text], input[type=password], select{
 input[type=text]:focus, input[type=password]:focus{
 	box-shadow: 2px 2px 5px 3px #E2E2E2;
 }
+textarea{
+	padding-left: 15px;
+	border-radius: 7px;
+	border-color: rgb(240, 231, 234);
+	font-family: Arial;
+	box-shadow: 0px;
+	color: rgb(124, 117, 117);
+	font-style: italic;
+}
+textarea:focus{
+	box-shadow: 2px 2px 5px 3px #E2E2E2;
+}
 select{
 	padding:4px 10px;
 }

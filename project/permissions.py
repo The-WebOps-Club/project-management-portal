@@ -6,38 +6,44 @@
 
 from project.models import *
 class PermissionHandler:
-
+	@staticmethod
 	def create_update( user, **kwargs ):
 		p_id = kwargs['project']
 		
 		p = Project.objects.filter( pk = p_id )[0]
-		if( user in p.users + p.mentors):
+		if( user in p.users.all() + p.mentors.all()):
 			return 1
 		else:
 			return 0
 
+	@staticmethod
 	def view_update( user, **kwargs ):
 		if user.is_authenticated():
 			return 1
 		else:
 			return 0
-
+	@staticmethod
 	def create_task( user, **kwargs ):
 		pass
+
+	@staticmethod
 	def create_club( user, **kwargs ):
 		return 0
 
+	@staticmethod
 	def create_project( user, **kwargs ):
 		return 0
 
+	@staticmethod
 	def edit_club( user, **kwargs ):
 		return 0
 
+	@staticmethod
 	def edit_project( user, **kwargs ):
 		p_id = kwargs['project']
 		
 		p = Project.objects.filter( pk = p_id )[0]
-		if( user in p.mentors):
+		if( user in p.mentors.all()):
 			return 1
 		else:
 			return 0		
