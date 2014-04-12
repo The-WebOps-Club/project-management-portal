@@ -1,4 +1,5 @@
-
+{% load dajaxice_templatetags %}
+{% load staticfiles %}
 <!DOCTYPE html>
 <!--[if IE 8]>
 <html xmlns="http://www.w3.org/1999/xhtml" class=""  lang="en-US">
@@ -10,7 +11,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>{%block title%} {%endblock%} | {{user.first_name}} {{user.last_name}} | CFI Projects Management Portal</title>
-        
+
         <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
         <link rel="stylesheet" type="text/css" href="{%static 'css/bootstrap.min.css'%}">
         <link rel="stylesheet" type="text/css" href="{%static 'css/glyphicons.css'%}">
@@ -23,6 +24,8 @@
 		<!--<script src="static/javascript/bootstrap.js"></script> -->
         <script src="{%static 'javascript/bootstrap.min.js'%}"></script>
 		<link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+		<script type='text/javascript' src= {% static 'jquery.dajax.core.js' %} ></script>	
+        {% dajaxice_js_import %}
 	
 	
 	</head>
