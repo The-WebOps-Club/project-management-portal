@@ -1,0 +1,152 @@
+{%extends 'base.html'%}
+{%load profile%}
+<!-- Supposedly complete. TODO: change layout to a card structure -->
+
+<!-- Context Requiurements -->
+<!-- 
+	Club details as club
+	ClubEditView(POST only)
+	User Details(contrib.auth context processor) as user
+	Projects under this club as project_list
+-->
+{%block html_title%}{{club.name}}{%endblock%}
+{%block title%}{{club.name}}{%endblock%}
+{%block content%}
+<div class="read-tab-content" style="display: block;">
+	<table>
+		<tbody><tr>
+			<td>UID {{club.pk}}</td>
+			<td><strong>{{club.name}}</strong></td>
+		</tr>
+		<tr>
+		<td colspan="2">
+				<div class="brief-writeup"><p class="text" id="1395992530932_clone"></p></div>
+			</td>
+		</tr>
+		<tr>
+		<td colspan="2">
+			<div class="detail-writeup-left"><p class="text" id="1395992530922_clone">{{club.description}}<a href="javascript:void(0);" class="cmConstrain " title="Show Less">[ Less ]</a></p></div>
+			<div class="detail-writeup-right">
+				<center>
+					<img src="{{club.image.url}}">
+				</center>
+			</div>
+		</td>
+		</tr>
+
+		
+		<!--<tr> Removed as per reviewed design structure.
+			<td><strong>Overall Budget: </strong>950000</td>
+			<td><strong>Utilized Budget: </strong>55000</td>
+		</tr>-->
+	</tbody></table>
+	<div class="col-md-12" style='text-align:center'>
+		{%if allow_club_edit%}
+			<div class="btn btn-primary edit-activity-btn">Edit</div>
+		{%endif%}
+	</div>
+	<div class="col-md-6">
+		<div class='divHeading1'>Projects</div>
+		<br>
+		{%for project in project_list%}
+			{%include 'project/project_tile.html'%}
+		{%endfor%}
+		{%if allow_create_project%}
+			<a class='btn btn-primary' href='{%url "create_blank_project" %}'>Create Project</a>
+		{%endif%}
+	</div>
+	<div class="col-md-6">
+
+		<div class='divHeading1'>Convenors</div>
+		{%for userdata in club.cores.all%}
+			{%include 'user/user_tile.html'%}
+		{%endfor%}
+		{%if all_add_core%}
+			<div><h5>Add Convenors:</h5></div>
+			<select name='convenors' multiple>
+				{%for u in all_users%}
+					<option value="{{u.pk}}">{{u.username}} {{u.first_name}} {{u.last_name}}</option>
+				{%endfor%}
+			</select>
+			<a class='btn btn-primary' href='{%url "add_cores_to_club" {{club.pk}}%}'>Add</a>
+		{%endif%}
+	</div>
+		
+	
+</div>
+{%if allow_club_edit%}
+<div class="editAcivityFormDiv" style="display: none;">
+
+	<form name="update_activity" class="form-horizontal" action="edit/" method="POST" enctype="multipart/form-data">
+	<input type="hidden" class="input-xlarge" name="id" value="1"> 
+	<table>
+		<tbody><tr>
+			<td>UID {{club.pk}}}</td>
+			<td><input type="text" class="input-xlarge" name="name" value="{{club.name}}"></td>
+		</tr>
+		<tr>
+		<td colspan="2">
+			<div class="detail-writeup-left"><textarea class="input-xlarge" id="textarea" rows="6" name="description">{{club.description}}</textarea></div>
+			<div class="detail-writeup-right">
+				<center>
+					<img src="{{club.image.url}}">
+				</center>
+			</div>
+		</td>
+		</tr>
+		
+		<!-- Removed on demand -->
+		<!--<tr>
+			<td><strong>Overall Budget: </strong><input type="text" class="input-xlarge" name="overall_budget" value="950000"></td>
+			<td><strong>Utilized Budget: </strong><input type="text" class="input-xlarge" name="utilized_budget" value="55000"></td>
+		</tr>-->
+		<tr>
+			<td></td>
+			<td><strong>BG Image: </strong><input type="file" name="image" id="exampleInputFile"></td>
+		</tr>
+	</tbody></table>
+	<button type="submit" class="btn btn-primary">Save</button>
+	<button type="button" class="btn btn-primary close-edit-activity-btn">Back</button>
+	{%csrf_token%}
+	</form>
+</div>
+{%endif%}
+<script>
+	$('.editAcivityFormDiv').fadeOut(0);
+	$('.detail-writeup-left>.text').cmtextconstrain({
+		event: 'click', 
+		onExpose: function(){}, 
+		onConstrain: function(){}, 
+		restrict: {type: 'words', limit: 60}, 
+		showControl: {string: '[ More ]', title: 'Show More', addclass: ''}, 
+		hideControl: {string: '[ Less ]', title: 'Show Less', addclass: ''}, 
+		trailingString: '....'
+    });
+	$('.brief-writeup>.text').cmtextconstrain({
+		event: 'click', 
+		onExpose: function(){}, 
+		onConstrain: function(){}, 
+		restrict: {type: 'words', limit: 30}, 
+		showControl: {string: '[ More ]', title: 'Show More', addclass: ''}, 
+		hideControl: {string: '[ Less ]', title: 'Show Less', addclass: ''}, 
+		trailingString: '....'
+    });
+	$('.documentsDiv table .file-tag').cmtextconstrain({
+		event: 'click', 
+		onExpose: function(){}, 
+		onConstrain: function(){}, 
+		restrict: {type: 'words', limit: 4}, 
+		showControl: {string: '[ More ]', title: 'Show More', addclass: ''}, 
+		hideControl: {string: '[ Less ]', title: 'Show Less', addclass: ''}, 
+		trailingString: '....'
+    });
+	$('.edit-activity-btn').click(function(){
+		$('.read-tab-content').fadeOut(0);
+		$('.editAcivityFormDiv').fadeIn(100);
+	});
+	$('.close-edit-activity-btn').click(function(){
+		$('.read-tab-content').fadeIn(100);
+		$('.editAcivityFormDiv').fadeOut(0);
+	});
+</script>
+{%endblock%}

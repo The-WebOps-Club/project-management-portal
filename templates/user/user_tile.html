@@ -1,0 +1,11 @@
+{%load profile%}
+<div class="col-md-12" style="height:100px">
+	{%profile userdata as profildata%}
+	<div class="col-md-2">
+		<img src="{{profiledata.pic.url}}" height="100%">
+	</div>
+	<div class="col-md-10">
+		<h5>{{userdata.first_name}} {{usedata.last_name}} aka. {{userdata.username}}</h5>
+		<p>{{profiledata.room}},{{profiledata.hostel}}</p>
+	</div>
+</div>

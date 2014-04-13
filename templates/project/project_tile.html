@@ -1,0 +1,5 @@
+<div class='col-md-10 col-md-offset-1 project-list-element' style="height:100px">
+	<div class="col-md-2"><img src='{{project.image.url}}' style="height:100px"></div>
+	<div class="col-md-10"><h3> <a href='{% url "project:project_detail" project.pk %}'>{{project.name}}</a>  <small>{{project.club.name}}</small></h3> 
+	<p>{{project.brief}}</p></div>
+</div>

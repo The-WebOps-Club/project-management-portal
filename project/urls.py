@@ -25,6 +25,38 @@ urlpatterns = patterns('',
                        url(r'project/all/$',
                            AllProjectsListView.as_view(),
                            name='project_all'),
+
+                       url(r'project/(?P<project>\d+)/upload/$',
+                           upload_document,
+                           name='project_upload'),
+
+                       url(r'project/(?P<project>\d+)/update/add/$',
+                           CreateUpdate.as_view(),
+                           name='update_create'),
+
+                       url(r'project/(?P<project>\d+)/task/add/$',
+                           CreateTask.as_view(),
+                           name='task_create'),
+
+                       url(r'club/(?P<club>\d+)/$',
+                           club_detail_view,
+                           name='club_detail'),
+
+                       url(r'project/(?P<project>\d+)/edit/$',
+                           project_update,
+                           name='project_update'),
+
+                       url(r'club/(?P<club>\d+)/edit/$',
+                           club_update,
+                           name='club_update'),
+
+                       url(r'project/create/$',
+                           create_blank_project,
+                           name='create_blank_project'),
+
+                       url(r'club/(?P<club>\d+)/edit/$',
+                           add_cores_to_club,
+                           name='add_cores_to_club'),
                        )
 					   
                        

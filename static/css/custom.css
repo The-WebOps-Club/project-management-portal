@@ -109,6 +109,13 @@ td{
 form{
   margin:0px;
 }
+
+.project-list-element{
+	border-left:5px rgb(55, 166, 205) solid;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
 .container{
 	width:auto!important;
 	margin-left:20px;

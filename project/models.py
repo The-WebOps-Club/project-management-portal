@@ -17,7 +17,7 @@ class Club( models.Model ):
 	name = models.CharField( max_length = 200 )
 	description = models.CharField( max_length = 2500 )
 	cores = models.ManyToManyField( User )
-
+	image = models.ImageField( upload_to='repository' )
 
 class Project( models.Model, Tagged ):
 
@@ -63,9 +63,9 @@ class Task( models.Model, Tagged ):
 	content = models.CharField( max_length = 2500 )
 	deadline = models.DateTimeField()
 	timestamp = models.DateTimeField( auto_now_add = 'true' )
-	assigned = models.ManyToManyField( User, related_name = 'task_assigned' )
-	percent = models.IntegerField( choices = [(x,x) for x in range(0,101)] )
-	comments = models.ManyToManyField( Comment )
+	assigned = models.ManyToManyField( User, related_name = 'task_assigned' , blank='true', null='true')
+	percent = models.IntegerField( choices = [(x,x) for x in range(0,101)] , default='0')
+	comments = models.ManyToManyField( Comment , blank='true', null='true' )
 
 
 	def __unicode__( self ):

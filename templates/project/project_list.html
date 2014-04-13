@@ -11,16 +11,7 @@
 {%block html_title%}{{page_title}}{%endblock%}
 {%block content%}
 {%for project in project_list%}
-	<div class='col-md-10 col-md-offset-1 project-list-element'>
-		<h3> <a href='{% url "project:project_detail" project.pk %}'>{{project.name}}</a>  <small>{{project.club.name}}</small></h3> 
-		<p>{{project.brief}}</p>
-	</div>
+	{%include 'project/project_tile.html'%}
 {%endfor%}
-<style>
-	.project-list-element{
-		border-left:5px rgb(55, 166, 205) solid;
-		padding-top:5px;
-		padding-bottom:5px;
-	}
-</style>
+
 {%endblock%}

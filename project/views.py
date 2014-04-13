@@ -1,4 +1,4 @@
-from django.shortcuts import render,get_object_or_404, render_to_response
+from django.shortcuts import render,get_object_or_404, render_to_response, redirect
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
@@ -24,16 +24,22 @@ class CreateUpdate( CreateView ):
 		form.instance.parent = Project.objects.filter( pk = self.kwargs['project'] )[0]
 		return super( CreateUpdate, self ).form_valid( form )
 
+	def get_absolute_url(self):
+		return redirect(reverse('project:project_detail',self.kwargs['project']))
+
 class CreateTask( CreateView ):
 	model = Task
-	fields = ['title','content']
+	fields = ['title','content','deadline','assigned']
 
 	def form_valid( self, form ):
-		if( not PermissionHandler.create_task( self.request.user, **self.kwargs ) ):
-			raise PermissionDenied( 'You do NOT have permission to make a task :P' ) 
+		#if( not PermissionHandler.create_task( self.request.user, **self.kwargs ) ):
+		#	raise PermissionDenied( 'You do NOT have permission to make a task :P' ) 
 		form.instance.user = self.request.user
 		form.instance.parent = Project.objects.filter( pk = self.kwargs['project'] )[0]
 		return super( CreateTask, self ).form_valid( form )
+
+	def get_absolute_url(self):
+		return redirect(reverse('project:project_detail',self.kwargs['project']))
 
 class CreateProject( CreateView ):
 	model = Project
@@ -78,7 +84,9 @@ class MyProjectsListView( ListView ):
 
 	def get(self, request,*args,**kwargs):
 		if not request.user.is_authenticated():				# check for authentication
-			return PermissionDenied('You\'re not logged in.')	
+			raise PermissionDenied('You\'re not logged in.')
+
+		return super( MyProjectsListView, self ).get( request, *args, **kwargs )
 
 	def get_queryset(self, *args,**kwargs):
 		qs = super(MyProjectsListView, self).get_queryset(*args,**kwargs)
@@ -86,7 +94,7 @@ class MyProjectsListView( ListView ):
 		return qs
 
 	def get_context_data( self ):
-		ctx = super(AllProjectsListView, self).get_context_data()
+		ctx = super( MyProjectsListView, self).get_context_data()
 		ctx['page_title'] = 'My Projects'
 		return ctx
 
@@ -128,6 +136,16 @@ def project_detail_view( request, *args, **kwargs ):
 		else:
 			ctx['allow_project_edit'] = 1
 
+		if not PermissionHandler.create_update( request.user, project = kwargs['project'] ):
+			ctx['allow_update'] = 0
+		else:
+			ctx['allow_update'] = 1
+
+		if not PermissionHandler.create_task( request.user, project = kwargs['project'] ):
+			ctx['allow_task'] = 0
+		else:
+			ctx['allow_task'] = 1
+
 		return render_to_response( 'project/project_details.html', ctx, context_instance = RequestContext(request) )
 
 	elif request.method == 'POST':
@@ -147,7 +165,7 @@ def project_update( request, *args, **kwargs ):
 		project.brief = request.POST['brief_writeup']
 		project.status = request.POST['status']
 		project.name = request.POST['title']
-		project.image = request.POST['bgimg']
+		project.image = request.FILES['bgimg']
 		project.save()
 	except ValueError as e:	# implement a form clean mechanism here.
 		raise PermissionDenied('Error')
@@ -162,3 +180,54 @@ def upload_document( request, *args, **kwargs ):
 	d = Document( project = get_object_or_404( Project, pk = kwargs['project'] ), doc = request.POST['document'], user = request.user, desc = request.POST['desc'] )
 	d.save()
 	return redirect( reverse('project:project_detail', kwargs['project']) )
+
+@login_required
+def club_detail_view( request, **kwargs ):
+
+	ctx = { }
+
+	ctx['club'] = get_object_or_404( Club, pk = kwargs['club'] )
+	ctx['project_list'] = Project.objects.filter( club = ctx['club'] )
+
+	if not PermissionHandler.edit_club( request.user, club = kwargs['club'] ):
+		ctx['allow_club_edit'] = 0
+	else:
+		ctx['allow_club_edit'] = 1
+
+	if not PermissionHandler.create_project( request.user, club = kwargs['club'] ):
+		ctx['allow_project_create'] = 0
+	else:
+		ctx['allow_project_create'] = 1
+
+	if not PermissionHandler.add_core_to_club( request.user, club = kwargs['club'] ):
+		ctx['allow_add_core'] = 0
+	else:
+		ctx['allow_add_core'] = 1
+		
+	return render_to_response( 'project/club_details.html', ctx, context_instance = RequestContext(request) )
+
+@login_required
+def club_update( request, *args, **kwargs ):
+
+	if not PermissionHandler.edit_club( request.user, club = kwargs['club'] ):
+		return PermissionDenied('You are not allowed to edit!')
+
+	club = get_object_or_404( Club, pk = kwargs['club'] )
+
+	try:
+		club.description = request.POST['description']
+		club.name = request.POST['name']
+		club.image = request.FILES['image']
+		club.save()
+	except ValueError as e:	# implement a form clean mechanism here.
+		raise PermissionDenied('Error')
+
+	return redirect( reverse('project:club_detail', kwargs['club']) )
+
+@login_required
+def create_default_project( request, *args, **kwargs ):
+	pass
+
+@login_required
+def create_default_club( request, *args, **kwargs ):
+	pass

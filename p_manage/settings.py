@@ -82,6 +82,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     'p_manage.context_processors.site_url',
     'p_manage.context_processors.static_url',
+    'p_manage.context_processors.global_context',
 )
 
 # Static files (CSS, JavaScript, Images)
