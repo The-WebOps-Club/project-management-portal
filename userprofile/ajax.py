@@ -9,8 +9,11 @@ from dajaxice.utils import deserialize_form
 @dajaxice_register
 def get_profile(request):
 	dajax = Dajax()
-	user1 = UserProfile.objects.get(user = request.user)
-	form1 = UserProfileForm(instance = user1, initial = {'first_name': user1.user.first_name, 'last_name': user1.user.last_name})
+	try:
+		user1 = UserProfile.objects.get(user = request.user)
+		form1 = UserProfileForm(instance = user1, initial = {'first_name': user1.user.first_name, 'last_name': user1.user.last_name})
+	except:
+		form1 = UserProfileForm(initial = {'first_name': request.user.first_name, 'last_name': request.user.last_name})
 	cd1 = {'form': form1, 'user': request.user}
 	html1 = render_to_string('user/get_form.html', cd1, RequestContext(request))
 	dajax.assign('#UpdateDiv', 'innerHTML', html1)

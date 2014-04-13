@@ -43,7 +43,11 @@ INSTALLED_APPS = (
     'userprofile',
     'south',
     'dajaxice',
+    'registration',
+
 )
+
+ACCOUNT_ACTIVATION_DAYS = 7 #Django-registration
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -111,3 +115,5 @@ MEDIA_ROOT = (
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates')
 )
+
+LOGIN_URL = SITE_URL + 'account/login'

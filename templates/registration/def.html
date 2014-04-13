@@ -1,0 +1,266 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html xmlns="http://www.w3.org/1999/xhtml" class=""  lang="en-US">
+<![endif]-->
+<!--[if !(IE 8) ]><!-->
+<html xmlns="http://www.w3.org/1999/xhtml" class=""  lang="en-US">
+<!--<![endif]-->
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Login | CFI Projects Management Portal</title>
+        
+        <link rel="stylesheet" type="text/css" href="{%static 'css/bootstrap.css'%}">
+        <link rel="stylesheet" type="text/css" href="{%static 'css/bootstrap.min.css'%}">
+        <link rel="stylesheet" type="text/css" href="{%static 'css/glyphicons.css'%}">
+        <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
+        <link rel="stylesheet" type="text/css" href="{%static 'css/custom.css'%}">
+        <script src="{%static 'javascript/jquery-1.11.0.min.js'%}"></script>
+        <script src="{%static 'javascript/jquery.slimscroll.min.js'%}"></script>
+        <script src="{%static 'javascript/jquery.cmtextconstrain.js'%}"></script>
+        <script src="{%static 'javascript/custom.js'%}"></script>
+		<!--<script src="{%static 'javascript/bootstrap.js'%}"></script> -->
+        <script src="{%static 'javascript/bootstrap.min.js'%}"></script>
+		<link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+	
+	
+	</head>
+	<body>
+		<div id="container">
+			<div id="header">
+				<div class="navbar navbar-fixed-top">  
+				  <div class="navbar-inner">  
+						<div class="container"> 
+							<ul class="nav">
+							  <li class="active">
+								<a class="brand oswald-bold" href="index.php">CFI Projects Management Portal</a>
+							  </li>	
+							  <li>
+								<a href="#">About</a>
+							  </li>
+							  <li>
+								<a href="#">Help</a>
+							  </li>
+							  <li>
+								<a href="#">Contacts</a>
+							  </li>
+							</ul>
+                            
+							<ul class="nav pull-right">
+							  <li class="dropdown" >  
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown"> Profile <b class="caret" style="margin-top:0px;"></b></a>  
+																	<ul class="dropdown-menu">  
+										<li>
+											<a href="#">Please Login</a>
+										</li>
+									</ul>
+															  </li>  
+							</ul> 
+						</div>
+					</div>
+				</div>
+			</div>
+<!--
+				<div id="navbar">
+					Navbar<br>
+					Please login					<br>Navbar ends<br><br>
+				</div>
+-->
+
+<script type="text/javascript">
+	function update_content(str){
+		if (str.length==0){ 
+			document.getElementById("content").innerHTML="";
+			return;
+		}
+		var xmlhttp=new XMLHttpRequest();
+		xmlhttp.onreadystatechange=function(){
+			if (xmlhttp.readyState==4 && xmlhttp.status==200){
+				document.getElementById("content").innerHTML=xmlhttp.responseText;
+				var scripts = document.getElementById("content").getElementsByTagName('script');
+				eval(scripts[0].text);	
+			}
+		}
+		if (str == "Clubs" || str == "Competitions" || str == "Projects") {
+			xmlhttp.open("GET","templates/include/membership.php?type="+str,true); 
+		}
+		else {
+			xmlhttp.open("GET","templates/"+str+".php?ajax=true",true);
+		}
+		xmlhttp.send();
+	}
+</script>	<div id="bgDiv"></div>
+	<div id="content" style="margin-left:0px;background:none;"><br><br><br>
+				<div id="loginDiv">
+			<div id="whiteBgDiv"></div>
+			<form name="loginForm" action="index.php?action=login" method="POST">
+				<table>
+					<tr>
+						<td>
+							Username
+						</td>
+						<td>
+							<input type="text" name="username" placeholder="Username" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Password
+						</td>
+						<td>
+							<input type="password" name="password" placeholder="Password" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<input type="submit" name="login_form" value="Login" />
+							<!--<input type="button" value="New User" onClick="$('#registerDiv').fadeIn(250);" />-->
+						</td>
+					</tr>	
+					<tr>
+						<td colspan="2">
+							<a href="#" onClick="$('#forgotPassDiv').fadeIn(250);" >Forgot Password?</a>
+						</td>
+					</td>
+				</table>
+			</form>
+			<div id="returnMessage">
+							</div>
+			<div id="forgotPassDiv" style="display: block;">    
+				<form name="recoverPasswordForm" action="index.php?action=resetPassword" method="POST">
+					<center>
+						<table>
+							<tbody><tr>
+								<td>
+									<input style="width:220px;margin-bottom:0px;" type="text" name="email" placeholder="Enter your email">
+								</td>
+								<td>
+									<input type="submit" name="recoverPasswordBtn" value="Recover">
+								</td>
+							</tr>				 
+						</tbody></table>
+					</center>
+				</form>
+			</div>
+		</div>
+				<div id="registerDiv">
+			<div id="whiteBgDiv"></div>
+			<form name="registrationForm" action="index.php?action=register" method="POST" enctype="multipart/form-data">
+				<table>
+					<tr>
+						<td colspan="2">
+							Not registered? Please register below.
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Email
+						</td>
+						<td>
+							<input type="text" name="email" placeholder="Email as Username" value="" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Name
+						</td>
+						<td>
+							<input type="text" name="name" placeholder="Name" value="" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Roll No.
+						</td>
+						<td>
+							<input type="text" name="rollNo" placeholder="Roll No." value="" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Room
+						</td>
+						<td>
+							<input type="text" name="room" placeholder="Room No." value="" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Hostel
+						</td>
+						<td>
+							<select name="hostel">
+								<option value="-1" selected>Select</option>
+								<option value="Alakananda"  >Alakananda</option>
+								<option value="Brahmaputra"  >Brahmaputra</option>
+								<option value="Cauvery"  >Cauvery</option>
+								<option value="Ganga"  >Ganga</option>
+								<option value="Godavari"  >Godavari</option>
+								<option value="Jamuna"  >Jamuna</option>
+								<option value="Krishna"  >Krishna</option>
+								<option value="Mahanadi"  >Mahanadi</option>
+								<option value="Mandakini"  >Mandakini</option>
+								<option value="Narmada"  >Narmada</option>
+								<option value="Pampa"  >Pampa</option>
+								<option value="Saraswathi"  >Saraswathi</option>
+								<option value="Sarayu"  >Sarayu</option>
+								<option value="Sarayu Ext."  >Sarayu Ext.</option>
+								<option value="Sharavathi"  >Sharavathi</option>
+								<option value="Sindhu"  >Sindhu</option>
+								<option value="Tamiraparani"  >Tamiraparani</option>
+								<option value="Tapti"  >Tapti</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Phone
+						</td>
+						<td>
+							<input type="text" name="phone" placeholder="Contact No." value="" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Password
+						</td>
+						<td>
+							<input type="password" name="password" placeholder="Choose Password" />
+						</td>
+					</tr>
+					<!--<tr>
+						<td>
+							Profile Picture
+						</td>
+						<td>
+							<input type="file" name="file" />
+						</td>
+					</tr>-->
+					<tr>
+						<td colspan="2">
+							<input type="submit" name="register_form" value="Register" />
+						</td>
+					</tr>
+				</table>				 
+			</form>
+			<div id="returnMessage">
+							</div>
+		</div>
+					<script>
+				$('#registerDiv').fadeOut(0);
+				$('#forgotPassDiv').fadeOut(0);
+			</script>
+			</div>
+			<div id="footer" style="height:50px;" >
+				<div style="font-size:14px; color:#fff; padding: 4px 10px; font-family:Oswald; font-weight:300; text-align:center;" >
+					Project allocations have been declared, please login to check.<br>
+					For any login problems please contact - 1) Vineet ( 9445505731 )  2) Dharani ( 9043814168 ) or write a mail to <a style="color:#fff;" href="mailto:cfi.iitmadras@gmail.com">cfi.iitmadras@gmail.com</a>
+				</div>
+			</div>
+		</div> <!-- container -->
+	</body>
+</html>
+
+<style>
+
