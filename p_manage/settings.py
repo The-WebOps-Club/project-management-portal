@@ -86,6 +86,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     'p_manage.context_processors.site_url',
     'p_manage.context_processors.static_url',
+    'p_manage.context_processors.global_context',
 )
 
 TEMPLATE_LOADERS = (
@@ -100,6 +101,11 @@ STATICFILES_FINDERS = (
     'dajaxice.finders.DajaxiceFinder',
 )
 
+DAJAXICE_FUNCTIONS = (
+    'project.ajax.create_blank_club',
+    'project.ajax.create_blank_project'
+)
+#dajaxice_functions.register('project.ajax.create_blank_club')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 

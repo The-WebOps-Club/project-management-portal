@@ -15,9 +15,7 @@ urlpatterns = patterns('',
     url( r'^account/', include('userprofile.urls')),
     url( r'^$', TemplateView.as_view( template_name = 'base.html' ) ), # testing base template. to be replaced with index.html soon.
     url( r'^', include('project.urls', namespace = 'project' ) ),
-    url(r'^dajaxice/',include('dajaxice.urls')),
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
-    
 )
 
 urlpatterns += patterns('django.views.static', (r'^static/(?P<path>.*)$'

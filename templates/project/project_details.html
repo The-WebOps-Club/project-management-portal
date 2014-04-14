@@ -1,4 +1,5 @@
 {%extends 'base.html'%}
+{%load profile%}
 <!-- Supposedly complete. TODO: change layout to a card structure -->
 
 <!-- Context Requiurements -->
@@ -47,7 +48,7 @@
 		</tr>-->
 	</tbody></table>
 	{%if allow_project_edit%}
-	<div class="btn btn-primary"><div></div>Edit</div>
+	<div class="btn btn-primary edit-activity-btn"><div></div>Edit</div>
 	{%endif%}
 </div>
 {%if allow_project_edit%}
@@ -95,6 +96,7 @@
 	</tbody></table>
 	<button type="submit" class="btn btn-primary">Save</button>
 	<button type="button" class="btn btn-primary close-edit-activity-btn">Back</button>
+	{%csrf_token%}
 	</form>
 </div>
 {%endif%}
@@ -119,18 +121,19 @@
 		<td>{{doc.user.username}}</td>
 		<td>{{doc.timestamp}}</td>
 		<td class="file-tag" id="1395992530936" style="display: table-cell;">{{doc.desc}}</td>
-		<td><a class="delete-doc-link" href="#">Delete</a></td>
+		<td><button class="delete-doc-link" onclick="Dajaxice.project.delete_document(Dajax.process, { 'doc':{{doc.pk}}, 'project':{{ project.pk }} } )">Delete</button></td>
 	</tr>
 	{%endfor%}
 
 </tbody></table>
 
 <div class="divHeading2">Upload a new document</div>
-<form name="addDocument" action="#" enctype="multipart/form-data" method="POST">
+<form name="addDocument" action="{%url 'project:project_upload' project.pk%}" enctype="multipart/form-data" method="POST">
 	<table>
 		<tbody><tr>
-			<td><strong>File:</strong> <input type="file" name="docName"></td>
-			<td style="max-width:200px;"><strong>Tags:	</strong> <input type="text" name="tags" placeholder="Enter File Tags"></td>
+			<td><strong>File:</strong> <input type="file" name="doc"></td>
+			<td style="max-width:200px;"><strong>Description:	</strong> <input type="text" name="desc" placeholder="Enter File Tags"></td>
+			{%csrf_token%}
 			<td><input type="hidden" name="activityId" value="1"><input type="submit" value="Upload"></td>
 		</tr>
 	</tbody></table>
@@ -139,32 +142,92 @@
 <div class="col-md-4 col-md-offset-1">
 	<h6 class='divHeading1' style="text-align:center">Updates</h6>
 	{%for update in update_list%}
+		{% profile update.user as profiledata %}
 		<div class="col-md-12">
 			<div class="col-md-2">
-				<img src="{{update.user.pic.doc.url}}" height="100%">
+				<img src="{{profiledata.pic.url}}" height="100%">
 			</div>
 			<div class="col-md-10">
 				<h5>{{update.user.username}}</h5>
 				<p>{%if update.content.length > 30%} {{update.content|slice:30}} {%else%} {{update.content}} {%endif%}</p>
 			</div>
 		</div>
+		{%for comment in update.comments.all%}
+		<div class="col-md-10 col-md-offset-2">
+			{% profile comment.user as profiledata %}
+			<div class="col-md-12">
+				<div class="col-md-2">
+					<img src="{{profiledata.pic.url}}" height="100%">
+				</div>
+			
+				<div class="col-md-10">
+					<h5>{{comment.user.username}}</h5>
+					<p>{%if comment.content.length > 30%} {{comment.content|slice:30}} {%else%} {{comment.content}} {%endif%}</p>
+				</div>
+			</div>
+		</div>
+		{%endfor%}
+		<input type='text' name='comment_content' id='id_comment_desc'></input>
+		<button class='btn btn-primary' onclick="Dajaxice.project.comment_on_update(Dajax.process,{'update':{{update.pk}} , 'content': $('#id_comment_desc').val()})">Post Comment</button>
 	{%endfor%}
 	{%if no_updates%}
 		<div class='text-success'> You have no Updates </div>
 	{%endif%}
-	<form method="POST" action="new_update/">
+	{%if allow_update%}
+	<form method="POST" action="{% url 'project:update_create' project.pk %}">
 	<div><input type='text' name='title' style="width:100%" placeholder="Enter Title"></input></div>
 	<div><textarea type='text' name='content' rows='4' style="width:100%" placeholder="Enter Content"></textarea></div><br>
+	{%csrf_token%}
 	<div><button class="btn btn-primary">Post Update</button></div>
 	</form>
+	{%endif%}
 </div>
 <div class="col-md-4 col-md-offset-2">
 	<h6 class='divHeading1' style="text-align:center">Tasks</h6>
 	{%for task in task_list%}
 		<div class="col-md-12">
-			
+			<div class="col-md-5"><h5>{{task.title}}</h5></div>
+			<div class="col-md-6 col-md-offset-1"><h5>by {{task.user.username}}</h5></div>
+			<div class="col-md-12"><p>{{task.content}}</p></div>
+			<div class="col-md-12">Assigned to :<ul>{%for assignee in task.assigned.all %}<li>{{assignee.username}}</li>{%endfor%}</ul></div>
+			<div class="col-md-12">due by {{task.deadline}}</div>
+			<div class="col-md-12" style="height:1px;background-color:#CCC"></div> 
 		</div>
+		{%for comment in task.comments.all%}
+		<div class="col-md-10 col-md-offset-2">
+			{%  profile comment.user as profiledata %}
+			<div class="col-md-12">
+				<div class="col-md-2">
+					<img src="{{profiledata.pic.url}}" height="100%">
+				</div>
+			
+				<div class="col-md-10">
+					<h5>{{comment.user.username}}</h5>
+					<p>{%if comment.content.length > 30%} {{comment.content|slice:30}} {%else%} {{comment.content}} {%endif%}</p>
+				</div>
+			</div>
+		</div>
+		{%endfor%}
+		<input type='text' name='comment_content2' id='id_comment_desc2'></input>
+		<button class='btn btn-primary' onclick="Dajaxice.project.comment_on_update(Dajax.process,{'update':{{task.pk}} , 'content': $('#id_comment_desc2').val()})">Post Comment</button>
 	{%endfor%}
+
+	{%if no_tasks%}
+		<div class='text-success'> You have no Tasks </div>
+	{%endif%}
+
+	<div>
+	{%if allow_task%}
+	<form method="POST" action="{% url 'project:task_create' project.pk %}">
+		<div><input type='text' name='title' style="width:100%" placeholder="Enter Title"></input></div>
+		<div><textarea type='text' name='content' rows='4' style="width:100%" placeholder="Enter Content"></textarea></div><br>
+		<div><input type='datetime-local' name='deadline' style="width:100%" ></input></div><br>
+		<div><select name='assigned' style="width:100%" multiple>{%for u in project.users.all%}<option value='{{u.pk}}'>{{u.username}}</option>{%endfor%}</select></div><br>
+		{%csrf_token%}
+		<div><button class="btn btn-primary">Post Task</button></div>
+	</form>
+	</div>
+	{%endif%}
 </div>
 
 </div>

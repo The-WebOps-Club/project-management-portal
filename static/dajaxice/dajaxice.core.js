@@ -7,14 +7,47 @@ var Dajaxice = {
     
 
     
-    userprofile: {
+    project: {
     
-    save_profile: function(callback_function, argv, custom_settings){
-        return Dajaxice.call('userprofile.save_profile', 'POST', callback_function, argv, custom_settings);
+    delete_document: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.delete_document', 'POST', callback_function, argv, custom_settings);
     },
 
+    comment_on_update: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.comment_on_update', 'POST', callback_function, argv, custom_settings);
+    },
+
+    add_core_to_club: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.add_core_to_club', 'POST', callback_function, argv, custom_settings);
+    },
+
+    create_blank_club: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.create_blank_club', 'POST', callback_function, argv, custom_settings);
+    },
+
+    comment_on_task: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.comment_on_task', 'POST', callback_function, argv, custom_settings);
+    },
+
+    create_blank_project: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.create_blank_project', 'POST', callback_function, argv, custom_settings);
+    }
+
+
+    
+    
+    }
+    
+,
+    
+    userprofile: {
+    
     get_profile: function(callback_function, argv, custom_settings){
         return Dajaxice.call('userprofile.get_profile', 'POST', callback_function, argv, custom_settings);
+    },
+
+    save_profile: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('userprofile.save_profile', 'POST', callback_function, argv, custom_settings);
     }
 
 

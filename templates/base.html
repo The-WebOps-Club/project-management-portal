@@ -6,6 +6,7 @@
 <![endif]-->
 {%load staticfiles%}
 <!--[if !(IE 8) ]><!-->
+{%load profile%}
 <html xmlns="http://www.w3.org/1999/xhtml" class=""  lang="en-US">
 <!--<![endif]-->
 	<head>
@@ -54,7 +55,7 @@
 							  <li class="dropdown" >  
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown"> Profile <b class="caret" style="margin-top:0px;"></b></a>  
 																<ul class="dropdown-menu" style="width:350px">  
-                                    <img class="headerPPic" src="upload/ProfilePics/14.jpg">
+                                    <img class="headerPPic" src="{%profile user as profiledata%}{{profiledata.pic.url}}">
                                     <li>
 										<a href="#">{{user.first_name}} {{user.last_name}} aka. {{user.username}}</a>
 									</li> 
@@ -123,7 +124,15 @@
 						</ul>
 					</li>
 					<!--<li class="glyphicons notes"><a href="javascript:update_content('Projects');"><span>Projects</span></a></li>-->
-					<li class="glyphicons notes"><a href="#"><span>Clubs</span></a></li>
+					<li class="hasSubmenu">
+						<a data-toggle="collapse" class="glyphicons settings" href="#menu_clubs"><span>Clubs</span></a>
+						<ul class="menuCollapse" id="menu_clubs">
+							{%for club in club_list%}
+							<li class=""><a href="{% url 'project:club_detail' club.pk%}"><span>{{club.name}}</span></a></li>
+							{%endfor%}
+							<li class=""><a href="{% url 'project:club_create'%}">Create a Club</a></li>
+						</ul>
+					</li>
 					<li class="glyphicons notes"><a href="#"><span>People</span></a></li>
 				</ul>
 				</div>
