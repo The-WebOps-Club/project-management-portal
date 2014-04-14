@@ -12,4 +12,7 @@ def profile(qs, **kwargs):
             ...
           {% endfor %}
     """
-    return get_object_or_404( UserProfile, user=qs)
+    if qs.is_authenticated():
+    	return get_object_or_404( UserProfile, user=qs)
+    else:
+    	return 0
