@@ -2,7 +2,10 @@
 
 {% block scripts %}
 	$(document).ready(function(){
-		Dajaxice.userprofile.get_profile(Dajax.process);
+		if({{decide}}) {
+			Dajaxice.userprofile.get_profile(Dajax.process, {'form1': {{form}},});
+		}
+		else Dajaxice.userprofile.get_profile(Dajax.process);
 	})
 {% endblock %}
 

@@ -1,5 +1,5 @@
-<form name="updateForm" class="form-horizontal" id='profile-form'>
+<form name="updateForm" enctype="multipart/form-data" class="form-horizontal" id='profile-form' action="/account/upload/" method=post>
 {%csrf_token%}	
 	{{form.as_ul}}
-	<a class="btn btn-primary" name="updateFormSubmit" onclick="Dajaxice.userprofile.save_profile(Dajax.process, {'form2': $('#profile-form').serialize(true),})">Save Changes</a>
+	<input type="submit" value="Save Changes" class="btn btn-primary">
 </form>

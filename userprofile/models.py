@@ -10,7 +10,7 @@ class UserProfile( models.Model ):
 	room = models.CharField( max_length = 4)
 	expertise = models.CharField( max_length = 2500)
 	social_media_URL = models.CharField( max_length = 500)
-	pic = models.ImageField( upload_to = 'media/user_pics/')
+	pic = models.ImageField( upload_to = 'user_pics/', default = 'user_pics/default.jpg')
 
 	def __unicode__(self):
 		return self.user.username
