@@ -32,3 +32,4 @@ def save_profile(request, form2):
 	u.last_name = res.cleaned_data['last_name']
 	u.save()
 	return get_profile(request)
+

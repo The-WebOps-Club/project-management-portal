@@ -49,14 +49,8 @@ urlpatterns = patterns('',
                        url(r'club/(?P<club>\d+)/edit/$',
                            club_update,
                            name='club_update'),
-
-                       url(r'project/create/$',
-                           create_blank_project,
-                           name='create_blank_project'),
-
-                       url(r'club/(?P<club>\d+)/edit/$',
-                           add_cores_to_club,
-                           name='add_cores_to_club'),
-                       )
-					   
                        
+                       url(r'club/create/$',
+                           TemplateView.as_view( template_name= 'project/club_create.html' ),
+                           name='club_create'),
+                       )

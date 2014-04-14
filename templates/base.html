@@ -130,6 +130,7 @@
 							{%for club in club_list%}
 							<li class=""><a href="{% url 'project:club_detail' club.pk%}"><span>{{club.name}}</span></a></li>
 							{%endfor%}
+							<li class=""><a href="{% url 'project:club_create'%}">Create a Club</a></li>
 						</ul>
 					</li>
 					<li class="glyphicons notes"><a href="#"><span>People</span></a></li>

@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from project.models import Club
-from  import User
+from django.contrib.auth.models import User
+from project.permissions import PermissionHandler
 
 def site_url(request):
     """
@@ -19,5 +20,11 @@ def static_url(request):
     return {'static_url': settings.STATIC_URL}
 
 def global_context(request):
-    # provide context data on clubs for the leftbar.
-    return {'club_list': Club.objects.all(), 'all_users':User.objects.all()}
+    # provide context data for the leftbar.
+    ctx = {'club_list': Club.objects.all(), 'all_users':User.objects.all()}
+    if request.user.is_authenticated() and PermissionHandler.create_club( request.user ):
+        ctx['allow_club_create'] = 1
+    else:
+        ctx['allow_club_create'] = 0
+    
+    return ctx

@@ -51,8 +51,14 @@
 		{%for project in project_list%}
 			{%include 'project/project_tile.html'%}
 		{%endfor%}
-		{%if allow_create_project%}
-			<a class='btn btn-primary' href='{%url "create_blank_project" %}'>Create Project</a>
+		<br>
+
+		{%if allow_project_create%}
+		<div class='row'>
+		<div class='col-md-12' style='text-align:center;padding-top:10px'>
+			<button class='btn btn-primary' onclick='Dajaxice.project.create_blank_project(Dajax.process,{"club":{{club.pk}}})'>Create Project</button>
+		</div>
+		</div>
 		{%endif%}
 	</div>
 	<div class="col-md-6">
@@ -61,14 +67,15 @@
 		{%for userdata in club.cores.all%}
 			{%include 'user/user_tile.html'%}
 		{%endfor%}
-		{%if all_add_core%}
+		{%if allow_add_core%}
 			<div><h5>Add Convenors:</h5></div>
-			<select name='convenors' multiple>
+			<select name='convenors' id='conv' multiple>
 				{%for u in all_users%}
 					<option value="{{u.pk}}">{{u.username}} {{u.first_name}} {{u.last_name}}</option>
 				{%endfor%}
 			</select>
-			<a class='btn btn-primary' href='{%url "add_cores_to_club" {{club.pk}}%}'>Add</a>
+			<button class='btn btn-primary' onclick='Dajaxice.project.add_core_to_club(Dajax.process, {"club":{{club.pk}},"convenors":$("#conv").val()})'>Add</button>
+
 		{%endif%}
 	</div>
 		

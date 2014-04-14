@@ -7,7 +7,7 @@ from project.models import Update, Project, Task, Club, Comment, Document
 from project.permissions import PermissionHandler
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-
+from django.core.urlresolvers import reverse
 
 # curently using class-based views for cleaner code.
 # one view for creating, editing and deleting an object of a particular type.
@@ -25,7 +25,7 @@ class CreateUpdate( CreateView ):
 		return super( CreateUpdate, self ).form_valid( form )
 
 	def get_absolute_url(self):
-		return redirect(reverse('project:project_detail',self.kwargs['project']))
+		return reverse('project:project_detail',args=[self.kwargs['project']])
 
 class CreateTask( CreateView ):
 	model = Task
@@ -165,21 +165,24 @@ def project_update( request, *args, **kwargs ):
 		project.brief = request.POST['brief_writeup']
 		project.status = request.POST['status']
 		project.name = request.POST['title']
-		project.image = request.FILES['bgimg']
+		project.image = request.FILES['bgImg']
 		project.save()
 	except ValueError as e:	# implement a form clean mechanism here.
 		raise PermissionDenied('Error')
 
-	return redirect( reverse('project:project_detail', kwargs['project']) )
+	return redirect( reverse('project:project_detail', args=[kwargs['project']]) )
 
 @login_required
 def upload_document( request, *args, **kwargs ):
 	if not PermissionHandler.edit_project( request.user, project = kwargs['project'] ):
 		return PermissionDenied('You are not allowed to upload to this project!')
 
-	d = Document( project = get_object_or_404( Project, pk = kwargs['project'] ), doc = request.POST['document'], user = request.user, desc = request.POST['desc'] )
+	d = Document( doc = request.FILES['doc'], user = request.user, desc = request.POST['desc'] )
 	d.save()
-	return redirect( reverse('project:project_detail', kwargs['project']) )
+	project = get_object_or_404( Project, pk = kwargs['project'] )
+	project.documents.add(d)
+	project.save()
+	return redirect( reverse('project:project_detail', args=[kwargs['project']] ) )
 
 @login_required
 def club_detail_view( request, **kwargs ):
@@ -222,7 +225,7 @@ def club_update( request, *args, **kwargs ):
 	except ValueError as e:	# implement a form clean mechanism here.
 		raise PermissionDenied('Error')
 
-	return redirect( reverse('project:club_detail', kwargs['club']) )
+	return redirect( reverse('project:club_detail', args=[kwargs['club']] ) )
 
 @login_required
 def create_default_project( request, *args, **kwargs ):

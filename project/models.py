@@ -2,6 +2,14 @@ from django.db import models
 from search.models import Tagged
 from django.contrib.auth.models import User
 # shift models to a different app if necessary.
+
+
+class Club( models.Model ):
+	name = models.CharField( max_length = 200 )
+	description = models.CharField( max_length = 2500 )
+	cores = models.ManyToManyField( User , blank='true', null='true')
+	image = models.ImageField( upload_to='repository', default='repository/default.jpg' )
+
 class Document( models.Model, Tagged ):
 
 	name = models.CharField( max_length = 100 )
@@ -12,13 +20,7 @@ class Document( models.Model, Tagged ):
 
 	def __unicode__( self ):
 		return self.name
-
-class Club( models.Model ):
-	name = models.CharField( max_length = 200 )
-	description = models.CharField( max_length = 2500 )
-	cores = models.ManyToManyField( User )
-	image = models.ImageField( upload_to='repository' )
-
+		
 class Project( models.Model, Tagged ):
 
 	club = models.ForeignKey( Club , related_name = 'parent_club' )
@@ -28,9 +30,9 @@ class Project( models.Model, Tagged ):
 	status = models.CharField( max_length = 1000 )
 	users = models.ManyToManyField( User , related_name = 'project_member' , blank='true', null='true')
 	mentors = models.ManyToManyField( User, related_name = 'project_mentor' , blank='true', null='true')
-	budget = models.CharField( max_length = 10 )
+	budget = models.CharField( max_length = 10, blank='true' )
 	documents = models.ManyToManyField( Document , blank='true', null='true')
-	image = models.ImageField( upload_to='repository' )
+	image = models.ImageField( upload_to='repository', default='repository/default.jpg')
 
 	def __unicode__( self ):
 		return self.name

@@ -1,0 +1,16 @@
+{%extends 'base.html'%}
+{%load profile%}
+<!-- Supposedly complete. TODO: change layout to a card structure -->
+
+<!-- Context Requiurements -->
+<!-- 
+	Club details as club
+	ClubEditView(POST only)
+	User Details(contrib.auth context processor) as user
+	Projects under this club as project_list
+-->
+{%block html_title%}{{club.name}}{%endblock%}
+{%block title%}{{club.name}}{%endblock%}
+{%block content%}
+<div class="col-md-12" style='text-align:center'><button onclick='Dajaxice.call("project.create_blank_club", "POST", Dajax.process);'>Create Club</button></div>
+{%endblock%}
