@@ -221,7 +221,7 @@
 	<form method="POST" action="{% url 'project:task_create' project.pk %}">
 		<div><input type='text' name='title' style="width:100%" placeholder="Enter Title"></input></div>
 		<div><textarea type='text' name='content' rows='4' style="width:100%" placeholder="Enter Content"></textarea></div><br>
-		<div><input type='datetime-local' name='deadline' style="width:100%" ></input></div><br>
+		<div><input type='date' name='deadline' style="width:100%" ></input></div><br>
 		<div><select name='assigned' style="width:100%" multiple>{%for u in project.users.all%}<option value='{{u.pk}}'>{{u.username}}</option>{%endfor%}</select></div><br>
 		{%csrf_token%}
 		<div><button class="btn btn-primary">Post Task</button></div>

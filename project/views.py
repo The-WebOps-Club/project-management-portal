@@ -8,6 +8,7 @@ from project.permissions import PermissionHandler
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 # curently using class-based views for cleaner code.
 # one view for creating, editing and deleting an object of a particular type.
@@ -22,9 +23,10 @@ class CreateUpdate( CreateView ):
 
 		form.instance.user = self.request.user
 		form.instance.parent = Project.objects.filter( pk = self.kwargs['project'] )[0]
-		return super( CreateUpdate, self ).form_valid( form )
+		super( CreateUpdate, self ).form_valid( form )
+		return HttpResponseRedirect(reverse('project:project_detail',args=[self.kwargs['project']]))
 
-	def get_absolute_url(self):
+	def get_success_url(self, *args, **kwargs):
 		return reverse('project:project_detail',args=[self.kwargs['project']])
 
 class CreateTask( CreateView ):
@@ -38,8 +40,8 @@ class CreateTask( CreateView ):
 		form.instance.parent = Project.objects.filter( pk = self.kwargs['project'] )[0]
 		return super( CreateTask, self ).form_valid( form )
 
-	def get_absolute_url(self):
-		return redirect(reverse('project:project_detail',self.kwargs['project']))
+	def get_success_url(self):
+		return reverse('project:project_detail',args=[self.kwargs['project']])
 
 class CreateProject( CreateView ):
 	model = Project
