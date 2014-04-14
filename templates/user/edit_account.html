@@ -1,12 +1,12 @@
 {%extends 'base.html'%}
 
 {% block scripts %}
-	$(document).ready(function(){
+	/*$(document).ready(function(){
 		if({{decide}}) {
 			Dajaxice.userprofile.get_profile(Dajax.process, {'form1': {{form}},});
 		}
 		else Dajaxice.userprofile.get_profile(Dajax.process);
-	})
+	})*/
 {% endblock %}
 
 {%block html_title%}
@@ -18,7 +18,11 @@
 		<div class="tab-content">
 			<div class="tab-pane active" id="basic-profile-tab">
 				<div id="UpdateDiv">
-					
+					<form name="updateForm" enctype="multipart/form-data" class="form-horizontal" id='profile-form' action="/account/upload/" method=post>
+					{%csrf_token%}	
+						{{form.as_ul}}
+						<input type="submit" value="Save Changes" class="btn btn-primary">
+					</form>
 				</div>   
 	
 			</div>

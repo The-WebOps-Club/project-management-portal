@@ -4,16 +4,21 @@ from userprofile.models import *
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from userprofile.ajax import get_profile
-from dajaxice.utils import deserialize_form
 
 @login_required
 def account(request):
-	cd1 = {'user': request.user, 'decide': 0, 'form': 0, }
+	try:
+		user1 = UserProfile.objects.get(user = request.user)
+		form1 = UserProfileForm(instance = user1, initial = {'first_name': user1.user.first_name, 'last_name': user1.user.last_name})
+	except:
+		form1 = UserProfileForm(initial = {'first_name': request.user.first_name, 'last_name': request.user.last_name})
+	cd1 = {'form': form1, 'user': request.user}
 	return render(request, 'user/edit_account.html', cd1)
 
 def test(request):
 	return render(request, 'registration/base.html', {'user': request.user})	
 
+@login_required
 def upload(request):
 	if request.method == 'POST':
 		try:
