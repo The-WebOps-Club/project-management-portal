@@ -93,8 +93,8 @@ class MyProjectsListView( ListView ):
 		qs.filter( users__in = [self.request.user] )
 		return qs
 
-	def get_context_data( self ):
-		ctx = super( MyProjectsListView, self).get_context_data()
+	def get_context_data( self, **kwargs):
+		ctx = super( MyProjectsListView, self).get_context_data(**kwargs)
 		ctx['page_title'] = 'My Projects'
 		return ctx
 
@@ -102,8 +102,8 @@ class AllProjectsListView( ListView ):
 	template_name = 'project/project_list.html'
 	context_object_name = 'project_list'
 	model = Project
-	def get_context_data( self ):
-		ctx = super(AllProjectsListView, self).get_context_data()
+	def get_context_data( self, **kwargs):
+		ctx = super(AllProjectsListView, self).get_context_data(**kwargs)
 		ctx['page_title'] = 'All Projects'
 		return ctx
 
