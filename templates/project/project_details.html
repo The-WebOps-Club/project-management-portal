@@ -55,7 +55,7 @@
 <div class="editAcivityFormDiv" style="display: none;">
 
 	<form name="update_activity" class="form-horizontal" action="edit/" method="POST" enctype="multipart/form-data">
-	<input type="hidden" class="input-xlarge" name="id" value="1"> 
+	<input type="hidden" class="input-xlarge" name="id" value="1">
 	<table>
 		<tbody><tr>
 			<td>UID 1</td>
@@ -124,7 +124,6 @@
 		<td><button class="delete-doc-link" onclick="Dajaxice.project.delete_document(Dajax.process, { 'doc':{{doc.pk}}, 'project':{{ project.pk }} } )">Delete</button></td>
 	</tr>
 	{%endfor%}
-
 </tbody></table>
 
 <div class="divHeading2">Upload a new document</div>
@@ -138,20 +137,25 @@
 		</tr>
 	</tbody></table>
 </form>
-
-<div class="col-md-4 col-md-offset-1">
-	<h6 class='divHeading1' style="text-align:center">Updates</h6>
-	{%for update in update_list%}
-		{% profile update.user as profiledata %}
-		<div class="col-md-12">
-			<div class="col-md-2">
-				<img src="{{profiledata.pic.url}}" height="100%">
+<div class='row'>
+	<div class="col-md-4 col-md-offset-1">
+		<h6 class='divHeading1' style="text-align:center">Updates</h6>
+		{%for update in update_list%}
+			{% profile update.user as profiledata %}
+			<div class='row' style='margin-top:25px;background-color:#ececec'>
+				<div class="col-md-12" style='background-color:#ececec'>
+					<div class="col-md-2">
+						<img src="{{profiledata.pic.url}}" height="100%">
+					</div>
+					<div class="col-md-8">
+						<h5>{{update.user.username}}</h5>
+						<p>{%if update.content.length > 30%} {{update.content|slice:30}} {%else%} {{update.content}} {%endif%}</p>
+					</div>
+					<div class='col-md-2 pull-right' style='text-align:right'>
+						<a class='btn btn-sm btn-danger' onclick="Dajaxice.project.delete_update(Dajax.process,{'update':{{update.pk}} })">Delete</a>
+					</div>
+				</div>
 			</div>
-			<div class="col-md-10">
-				<h5>{{update.user.username}}</h5>
-				<p>{%if update.content.length > 30%} {{update.content|slice:30}} {%else%} {{update.content}} {%endif%}</p>
-			</div>
-		</div>
 		{%for comment in update.comments.all%}
 		<div class="col-md-10 col-md-offset-2">
 			{% profile comment.user as profiledata %}
@@ -167,8 +171,8 @@
 			</div>
 		</div>
 		{%endfor%}
-		<input type='text' name='comment_content' id='id_comment_desc'></input>
-		<button class='btn btn-primary' onclick="Dajaxice.project.comment_on_update(Dajax.process,{'update':{{update.pk}} , 'content': $('#id_comment_desc').val()})">Post Comment</button>
+		<input type='text' name='comment_content' id='id_update_comment_{{update.pk}}'></input>
+		<button class='btn btn-primary' onclick="Dajaxice.project.comment_on_update(Dajax.process,{'update':{{update.pk}} , 'content': $('#id_update_comment_{{update.pk}}').val()})">Post Comment</button>
 	{%endfor%}
 	{%if no_updates%}
 		<div class='text-success'> You have no Updates </div>
@@ -185,13 +189,18 @@
 <div class="col-md-4 col-md-offset-2">
 	<h6 class='divHeading1' style="text-align:center">Tasks</h6>
 	{%for task in task_list%}
-		<div class="col-md-12">
-			<div class="col-md-5"><h5>{{task.title}}</h5></div>
-			<div class="col-md-6 col-md-offset-1"><h5>by {{task.user.username}}</h5></div>
-			<div class="col-md-12"><p>{{task.content}}</p></div>
-			<div class="col-md-12">Assigned to :<ul>{%for assignee in task.assigned.all %}<li>{{assignee.username}}</li>{%endfor%}</ul></div>
-			<div class="col-md-12">due by {{task.deadline}}</div>
-			<div class="col-md-12" style="height:1px;background-color:#CCC"></div> 
+		<div class="col-md-12" style='margin-top:15px'>
+			<div class='row'>
+				<div class="col-md-5"><h5>{{task.title}}</h5></div>
+				<div class="col-md-5"><h5>by {{task.user.username}}</h5></div>
+				<div class='col-md-2' style='text-align:right'><div><a class='btn btn-sm btn-danger' onclick="Dajaxice.project.delete_task(Dajax.process,{'task':{{task.pk}} })">Delete</a></div></div>
+			</div>
+			<div class='row'>
+				<div class="col-md-12" style='text-align:left'><p>{{task.content}}</p></div>
+				<div class="col-md-12">Assigned to :<ul>{%for assignee in task.assigned.all %}<li>{{assignee.username}}</li>{%endfor%}</ul></div>
+				<div class="col-md-12">due by {{task.deadline}}</div>
+				<div class="col-md-12" style="height:1px;background-color:#CCC"></div> 
+			</div>
 		</div>
 		{%for comment in task.comments.all%}
 		<div class="col-md-10 col-md-offset-2">
@@ -208,26 +217,63 @@
 			</div>
 		</div>
 		{%endfor%}
-		<input type='text' name='comment_content2' id='id_comment_desc2'></input>
-		<button class='btn btn-primary' onclick="Dajaxice.project.comment_on_update(Dajax.process,{'update':{{task.pk}} , 'content': $('#id_comment_desc2').val()})">Post Comment</button>
-	{%endfor%}
+			<input type='text' name='comment_content2' id='id_task_comment_{{task.pk}}'></input>
+			<button class='btn btn-primary' onclick="Dajaxice.project.comment_on_update(Dajax.process,{'update':{{task.pk}} , 'content': $('#id_task_comment_{{task.pk}}').val()})">Post Comment</button>
+		{%endfor%}
 
-	{%if no_tasks%}
-		<div class='text-success'> You have no Tasks </div>
-	{%endif%}
+		{%if no_tasks%}
+			<div class='text-success'> You have no Tasks </div>
+		{%endif%}
 
-	<div>
-	{%if allow_task%}
-	<form method="POST" action="{% url 'project:task_create' project.pk %}">
-		<div><input type='text' name='title' style="width:100%" placeholder="Enter Title"></input></div>
-		<div><textarea type='text' name='content' rows='4' style="width:100%" placeholder="Enter Content"></textarea></div><br>
-		<div><input type='date' name='deadline' style="width:100%" ></input></div><br>
-		<div><select name='assigned' style="width:100%" multiple>{%for u in project.users.all%}<option value='{{u.pk}}'>{{u.username}}</option>{%endfor%}</select></div><br>
-		{%csrf_token%}
-		<div><button class="btn btn-primary">Post Task</button></div>
-	</form>
+		<div>
+		{%if allow_task%}
+		<form method="POST" action="{% url 'project:task_create' project.pk %}">
+			<div><input type='text' name='title' style="width:100%" placeholder="Enter Title"></input></div>
+			<div><textarea type='text' name='content' rows='4' style="width:100%" placeholder="Enter Content"></textarea></div><br>
+			<div><input type='date' name='deadline' style="width:100%" ></input></div><br>
+			<div><select name='assigned' style="width:100%" multiple>{%for u in project.users.all%}<option value='{{u.pk}}'>{{u.username}}</option>{%endfor%}</select></div><br>
+			{%csrf_token%}
+			<div><button class="btn btn-primary">Post Task</button></div>
+		</form>
+		</div>
+		{%endif%}
 	</div>
-	{%endif%}
+
+</div>
+
+<div class='row'>
+	<div class='col-md-4 col-md-offset-1'>
+		<h6 class='divHeading1' style='text-align:center'>Users</h6>
+		{%for userdata in project.users.all%}
+			{%include 'user/user_tile.html'%}
+		{%endfor%}
+		{%if allow_add_user%}
+		<div><h5>Add Users:</h5></div>
+			<select name='user_list' id='ulist' multiple>
+				{%for u in all_users%}
+					<option value="{{u.pk}}">{{u.username}} {{u.first_name}} {{u.last_name}}</option>
+				{%endfor%}
+			</select>
+			<button class='btn btn-primary' onclick='Dajaxice.project.add_user_to_project(Dajax.process, {"project":{{project.pk}},"users":$("#ulist").val()})'>Add</button>
+		{%endif%}
+	</div>
+	<div class='col-md-4 col-md-offset-2'>
+		<h6 class='divHeading1' style='text-align:center'>Mentors</h6>
+
+		{%for userdata in project.mentors.all%}
+			{%include 'user/user_tile.html'%}
+		{%endfor%}
+
+		{%if allow_add_mentor%}
+		<div><h5>Add Mentors:</h5></div>
+			<select name='mentor_list' id='mlist' multiple>
+				{%for u in all_users%}
+					<option value="{{u.pk}}">{{u.username}} {{u.first_name}} {{u.last_name}}</option>
+				{%endfor%}
+			</select>
+			<button class='btn btn-primary' onclick='Dajaxice.project.add_mentor_to_project(Dajax.process, {"project":{{project.pk}},"mentors":$("#mlist").val()})'>Add</button>
+		{%endif%}
+	</div>
 </div>
 
 </div>

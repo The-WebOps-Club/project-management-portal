@@ -148,6 +148,17 @@ def project_detail_view( request, *args, **kwargs ):
 		else:
 			ctx['allow_task'] = 1
 
+		if not PermissionHandler.add_user_to_project( request.user, project = kwargs['project'] ):
+			ctx['allow_add_user'] = 0
+		else:
+			ctx['allow_add_user'] = 1
+
+		if not PermissionHandler.add_mentor_to_project( request.user, project = kwargs['project'] ):
+			ctx['allow_add_mentor'] = 0
+		else:
+			ctx['allow_add_mentor'] = 1
+
+
 		return render_to_response( 'project/project_details.html', ctx, context_instance = RequestContext(request) )
 
 	elif request.method == 'POST':

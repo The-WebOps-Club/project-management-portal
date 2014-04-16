@@ -41,3 +41,14 @@ def upload(request):
 			return HttpResponseRedirect('/account/user/')
 	else:
 	 	HttpResponseRedirect('/account/user/')
+
+
+@login_required
+def core_dashboard( request ):
+	# permission checking here.
+	# probably use groups to accomplish core-ness of the user.
+
+	ctx = {}
+	# load context here.(mostly statistics data)
+	
+	return render( request, 'user/dashboard_core.html', ctx )

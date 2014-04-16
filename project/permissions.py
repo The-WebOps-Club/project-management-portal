@@ -49,6 +49,14 @@ class PermissionHandler:
 		return 1
 
 	@staticmethod
+	def add_mentor_to_project( user, **kwargs ):
+		return 1
+
+	@staticmethod
+	def add_user_to_project( user, **kwargs ):
+		return 1
+
+	@staticmethod
 	def edit_project( user, **kwargs ):
 		return 1
 		p_id = kwargs['project']
@@ -60,4 +68,16 @@ class PermissionHandler:
 			return 0
 	@staticmethod
 	def delete_document( user, **kwargs ):
+		return 1
+
+	@staticmethod
+	def delete_comment( user, **kwargs ):
+		return 1
+
+	@staticmethod
+	def delete_update( user, **kwargs ):
+		return 1
+
+	@staticmethod
+	def delete_task( user, **kwargs ):
 		return 1

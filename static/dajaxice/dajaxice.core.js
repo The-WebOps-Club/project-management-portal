@@ -21,6 +21,22 @@ var Dajaxice = {
         return Dajaxice.call('project.add_core_to_club', 'POST', callback_function, argv, custom_settings);
     },
 
+    add_mentor_to_project: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.add_mentor_to_project', 'POST', callback_function, argv, custom_settings);
+    },
+
+    delete_task: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.delete_task', 'POST', callback_function, argv, custom_settings);
+    },
+
+    add_user_to_project: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.add_user_to_project', 'POST', callback_function, argv, custom_settings);
+    },
+
+    delete_comment: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.delete_comment', 'POST', callback_function, argv, custom_settings);
+    },
+
     create_blank_club: function(callback_function, argv, custom_settings){
         return Dajaxice.call('project.create_blank_club', 'POST', callback_function, argv, custom_settings);
     },
@@ -31,6 +47,10 @@ var Dajaxice = {
 
     create_blank_project: function(callback_function, argv, custom_settings){
         return Dajaxice.call('project.create_blank_project', 'POST', callback_function, argv, custom_settings);
+    },
+
+    delete_update: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.delete_update', 'POST', callback_function, argv, custom_settings);
     }
 
 
@@ -42,12 +62,12 @@ var Dajaxice = {
     
     userprofile: {
     
-    get_profile: function(callback_function, argv, custom_settings){
-        return Dajaxice.call('userprofile.get_profile', 'POST', callback_function, argv, custom_settings);
-    },
-
     save_profile: function(callback_function, argv, custom_settings){
         return Dajaxice.call('userprofile.save_profile', 'POST', callback_function, argv, custom_settings);
+    },
+
+    get_profile: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('userprofile.get_profile', 'POST', callback_function, argv, custom_settings);
     }
 
 
