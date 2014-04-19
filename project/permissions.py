@@ -57,6 +57,19 @@ class PermissionHandler:
 		return 1
 
 	@staticmethod
+	def remove_core_from_club( user, **kwargs ):
+		return 1
+
+	@staticmethod
+	def remove_mentor_from_project( user, **kwargs ):
+		return 1
+
+	@staticmethod
+	def remove_user_from_project( user, **kwargs ):
+		return 1
+
+
+	@staticmethod
 	def edit_project( user, **kwargs ):
 		return 1
 		p_id = kwargs['project']

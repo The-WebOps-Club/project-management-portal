@@ -178,12 +178,16 @@
 		<div class='text-success'> You have no Updates </div>
 	{%endif%}
 	{%if allow_update%}
-	<form method="POST" action="{% url 'project:update_create' project.pk %}">
-	<div><input type='text' name='title' style="width:100%" placeholder="Enter Title"></input></div>
-	<div><textarea type='text' name='content' rows='4' style="width:100%" placeholder="Enter Content"></textarea></div><br>
+	<form method="POST" action='#' id='update_form'>
+	<div><p id='title_error'></p><input type='text' name='title' style="width:100%" placeholder="Enter Title"></input></div>
+	<div><p id='content_error'></p><textarea type='text' name='content' rows='4' style="width:100%" placeholder="Enter Content"></textarea></div><br>
+	<input type=hidden name='title_feedback_field' value='title_error'></input>
+	<input type=hidden name='content_feedback_field' value='content_error'></input>
+	<input type=hidden name='project' value='{{project.pk}}'>
 	{%csrf_token%}
-	<div><button class="btn btn-primary">Post Update</button></div>
 	</form>
+	<div><button class="btn btn-primary" onclick='Dajaxice.project.add_update(Dajax.process, $("#update_form").serializeObject());'>Post Update</button></div>
+	<!--<button class='btn btn-primary' onclick='alert( JSON.stringify($("#update_form").serializeObject()) )'></button>-->
 	{%endif%}
 </div>
 <div class="col-md-4 col-md-offset-2">
@@ -227,14 +231,20 @@
 
 		<div>
 		{%if allow_task%}
-		<form method="POST" action="{% url 'project:task_create' project.pk %}">
-			<div><input type='text' name='title' style="width:100%" placeholder="Enter Title"></input></div>
-			<div><textarea type='text' name='content' rows='4' style="width:100%" placeholder="Enter Content"></textarea></div><br>
-			<div><input type='date' name='deadline' style="width:100%" ></input></div><br>
-			<div><select name='assigned' style="width:100%" multiple>{%for u in project.users.all%}<option value='{{u.pk}}'>{{u.username}}</option>{%endfor%}</select></div><br>
+		<form method="POST" id='task_form' action="{% url 'project:task_create' project.pk %}">
+			<div><p id='t_title_error'></p><input type='text' name='title' style="width:100%" placeholder="Enter Title"></input></div>
+			<div><p id='t_content_error'></p><textarea type='text' name='content' rows='4' style="width:100%" placeholder="Enter Content"></textarea></div><br>
+			<div><p id='t_deadline_error'></p><input type='date' name='deadline' style="width:100%" ></input></div><br>
+			<div><p id='t_assigned_error'></p><select name='assigned' style="width:100%" multiple>{%for u in project.users.all%}<option value='{{u.pk}}'>{{u.username}}</option>{%endfor%}</select></div><br>
+			<input type=hidden name='title_feedback_field' value='t_title_error'>
+			<input type=hidden name='content_feedback_field' value='t_content_error'>
+			<input type=hidden name='deadline_feedback_field' value='t_deadline_error'>
+			<input type=hidden name='assigned_feedback_field' value='t_assigned_error'>
+			<input type=hidden name='project' value='{{project.pk}}'>
 			{%csrf_token%}
-			<div><button class="btn btn-primary">Post Task</button></div>
+			
 		</form>
+		<div><button class="btn btn-primary" onclick='Dajaxice.project.add_task(Dajax.process, $("#task_form").serializeObject());'>Post Task</button></div>
 		</div>
 		{%endif%}
 	</div>

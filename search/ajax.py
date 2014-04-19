@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from dajaxice.decorators import dajaxice_register
 from dajax.core import Dajax
 from userprofile.models import UserProfile
@@ -14,26 +13,38 @@ from django.core.exceptions import PermissionDenied
 from project.permissions import PermissionHandler
 from project.models import *
 from project.views import *
-import re
-# simple seearch view that accepts a search value and looks for it in the data rendered by data_view
 """
-def get_match_count( term, data ):
-	res = 0
-	for i in data.split(' '):
-		if term.lower() == i.lower():
-			res+=1
-	return res
+search_instance_index = []
+
+
+def update_index( request, *args, **kwargs ):
+	# search titles and brief descriptions for ties to the search term
+	search_for = kwargs['search']
+	search_instance_index = []
+
+	class SearchInstance:
+		classpath = ''
+		instance = None
+		datasets = {}
+		def __init__(self,classpath='',instance=None):
+			self.classpath = classpath
+			self.instance = instance
+			
+
+	for s in SEARCH_MODELS:
+		for obj in s['model'].objects.all():
+			i = SearchInstance(classpath = s['classpath'],instance = obj)
+			i.datasets = obj.get_search_dataset()
+			search_instance_index.append()
 
 def simple_search( request, *args, **kwargs ):
 
-	term = kwargs['search']
 	obj_list = []
 	for s_model in settings.SEARCH_MODELS:
 		for obj in s_model['model'].objects.all():
-			data =  s_model['data_view'](obj)
-			obj.weight = 0
+			data =  obj.get_search_dataset()
 			for i in data:
-				obj.weight = get_match_count( term, data[i] )
+				obj.weight = get_match_count(data[i])
 				obj_list.append([obj,s_model['view']])
 
 	obj_list.sort( key = lambda u:u[0].weight )

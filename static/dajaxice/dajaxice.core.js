@@ -17,6 +17,10 @@ var Dajaxice = {
         return Dajaxice.call('project.comment_on_update', 'POST', callback_function, argv, custom_settings);
     },
 
+    add_task: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.add_task', 'POST', callback_function, argv, custom_settings);
+    },
+
     add_core_to_club: function(callback_function, argv, custom_settings){
         return Dajaxice.call('project.add_core_to_club', 'POST', callback_function, argv, custom_settings);
     },
@@ -33,12 +37,12 @@ var Dajaxice = {
         return Dajaxice.call('project.add_user_to_project', 'POST', callback_function, argv, custom_settings);
     },
 
-    delete_comment: function(callback_function, argv, custom_settings){
-        return Dajaxice.call('project.delete_comment', 'POST', callback_function, argv, custom_settings);
+    search: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.search', 'POST', callback_function, argv, custom_settings);
     },
 
-    create_blank_club: function(callback_function, argv, custom_settings){
-        return Dajaxice.call('project.create_blank_club', 'POST', callback_function, argv, custom_settings);
+    delete_comment: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.delete_comment', 'POST', callback_function, argv, custom_settings);
     },
 
     comment_on_task: function(callback_function, argv, custom_settings){
@@ -51,6 +55,26 @@ var Dajaxice = {
 
     delete_update: function(callback_function, argv, custom_settings){
         return Dajaxice.call('project.delete_update', 'POST', callback_function, argv, custom_settings);
+    },
+
+    remove_mentor_from_project: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.remove_mentor_from_project', 'POST', callback_function, argv, custom_settings);
+    },
+
+    remove_core_from_club: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.remove_core_from_club', 'POST', callback_function, argv, custom_settings);
+    },
+
+    create_blank_club: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.create_blank_club', 'POST', callback_function, argv, custom_settings);
+    },
+
+    add_update: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.add_update', 'POST', callback_function, argv, custom_settings);
+    },
+
+    remove_user_from_project: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('project.remove_user_from_project', 'POST', callback_function, argv, custom_settings);
     }
 
 

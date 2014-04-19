@@ -14,6 +14,26 @@ from project.permissions import PermissionHandler
 from project.models import *
 from project.views import *
 
+
+# some function decorators
+def value_error_feedback( in_func ):
+	def out_func( *args, **kwargs ):
+		try:
+			import pdb;pdb.set_trace()
+			in_func( *args, **kwargs )
+		except ValueError as e:
+			if (len(e.args) == 2):	# intercept special value errors
+				dajax = Dajax()
+				# write scripts to be executed on the client side to inform the client of the value error in a proper manner.
+				dajax.scripts('document.getElementById("'+e.args[1]+'").innerHTML = "'+e.args[0]+'"')
+				return dajax.json()
+
+			
+
+	return out_func
+
+
+
 @dajaxice_register
 def create_blank_project( request, **kwargs):
 	if( not PermissionHandler.create_project(request.user, **kwargs ) ): # check for permission using the permissions module.
@@ -206,3 +226,177 @@ def delete_comment( request, **kwargs ):
 	dajax = Dajax()
 	dajax.script('location.reload(true)')
 	return dajax.json()
+
+@dajaxice_register
+def remove_user_from_project( request, **kwargs ):
+
+	user = get_object_or_404( User, pk = kwargs['user'] )
+	project = get_object_or_404( Project, pk = kwargs['project'] )
+
+	if( (not PermissionHandler.remove_user_from_project( request.user, **kwargs )) ): # check for permission using the permissions module.
+		dajax = Dajax()
+		dajax.alert('You do NOT have this permission')
+		return dajax.json()
+
+
+	if user in project.users.all():
+		project.users.remove( user )
+	else:
+		raise ValueError('User does not belong to this project')
+
+
+	dajax = Dajax()
+	dajax.script('location.reload(true)')
+	return dajax.json()
+
+@dajaxice_register
+def remove_mentor_from_project( request, **kwargs ):
+
+	mentor = get_object_or_404( User, pk = kwargs['mentor'] )
+	project = get_object_or_404( Project, pk = kwargs['project'] )
+
+	if( (not PermissionHandler.remove_mentor_from_project( request.user, **kwargs )) ): # check for permission using the permissions module.
+		dajax = Dajax()
+		dajax.alert('You do NOT have this permission')
+		return dajax.json()
+
+
+	if mentor in project.mentors.all():
+		project.mentors.remove( mentor )
+	else:
+		raise ValueError('User does not belong to this project')
+
+
+	dajax = Dajax()
+	dajax.script('location.reload(true)')
+	return dajax.json()
+
+@dajaxice_register
+def remove_core_from_club( request, **kwargs ):
+
+	core = get_object_or_404( User, pk = kwargs['core'] )
+	project = get_object_or_404( Project, pk = kwargs['project'] )
+
+	if( (not PermissionHandler.remove_core_from_club( request.user, **kwargs )) ): # check for permission using the permissions module.
+		dajax = Dajax()
+		dajax.alert('You do NOT have this permission')
+		return dajax.json()
+
+
+	if core in club.cores.all():
+		club.cores.remove( core )
+	else:
+		raise ValueError('User does not belong to this club')
+
+
+	dajax = Dajax()
+	dajax.script('location.reload(true)')
+	return dajax.json()
+
+
+@dajaxice_register
+def add_update( request, **kwargs ):
+
+
+	import pdb;pdb.set_trace()
+	project = get_object_or_404( Project, pk = kwargs['project'] )
+
+	if( (not PermissionHandler.create_update( request.user, **kwargs )) ): # check for permission using the permissions module.
+		dajax = Dajax()
+		dajax.alert('You do NOT have this permission')
+		return dajax.json() 
+
+	# error handling for form data
+	# controller input data checking
+
+	try:
+		if 'content' not  in kwargs.keys() or kwargs['content'] == '':
+			raise ValueError('Content missing..',kwargs['content_feedback_field']) # controller feedback
+
+		if 'title' not in kwargs.keys() or kwargs['title'] == '':
+			raise ValueError('Title missing..',kwargs['title_feedback_field']) # controller feedback
+	except ValueError as e:
+		if (len(e.args) == 2):	# intercept special value errors
+			dajax = Dajax()
+			# prepare the feedback handles.
+			for x in ['content','title']:
+				dajax.script('document.getElementById("'+kwargs[x+'_feedback_field']+'").innerHTML = ""')
+
+			# write scripts to be executed on the client side to inform the client of the value error in a proper manner.
+			dajax.script('document.getElementById("'+e.args[1]+'").innerHTML = "'+e.args[0]+'"')
+			return dajax.json()
+
+	# controller operation
+	update = Update()
+	update.parent = project
+	update.content = kwargs['content']
+	update.title = kwargs['title']
+	update.user = request.user
+	update.save()
+
+
+	dajax = Dajax()
+	dajax.script('location.reload(true)')
+	return dajax.json()
+
+
+@value_error_feedback
+@dajaxice_register
+def add_task( request, **kwargs ):
+
+	project = get_object_or_404( Project, pk = kwargs['project'] )
+
+	# controller auth checking.
+	if( (not PermissionHandler.create_update( request.user, **kwargs )) ): # check for permission using the permissions module.
+		dajax = Dajax()	# controller feedback
+		dajax.alert('You do NOT have this permission')
+		return dajax.json()
+
+
+	
+
+
+
+	# error handling for form data
+	# controller input data checking
+	try:
+		for x in ['content','title','deadline']:
+			if x not in kwargs.keys() or kwargs[x] == '':
+				if x+'_feedback_field' in kwargs.keys():
+					raise ValueError(x+' missing..',kwargs[x+'_feedback_field']) # controller feedback
+				else:
+					raise ValueError(x+' missing..')
+	except ValueError as e:
+		if (len(e.args) == 2):	# intercept special value errors
+			dajax = Dajax()
+			# clear feedback fields. controller feedback initialization
+			for x in ['content','title','deadline']:
+				dajax.script('document.getElementById("'+kwargs[x+'_feedback_field']+'").innerHTML = ""')
+			# write scripts to be executed on the client side to inform the client of the value error in a proper manner.
+			dajax.script('document.getElementById("'+e.args[1]+'").innerHTML = "'+e.args[0]+'"')
+			return dajax.json()
+
+	# controller operation
+	task = Task()
+	task.content = kwargs['content']
+	task.title = kwargs['title']
+	task.deadline = kwargs['deadline']
+	task.parent = project
+
+	if 'assignees' in kwargs.keys():
+		for i in kwargs['assignees']:
+			user = get_object_or_404( User, pk=i )
+			task.assigned.add(user)
+
+
+	task.user = request.user
+	task.save()
+
+	# controller response on success.
+	dajax = Dajax()
+	dajax.script('location.reload(true)')
+	return dajax.json()
+
+@dajaxice_register
+def search( request, *args, **kwargs ):
+	pass

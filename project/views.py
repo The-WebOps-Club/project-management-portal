@@ -178,7 +178,8 @@ def project_update( request, *args, **kwargs ):
 		project.brief = request.POST['brief_writeup']
 		project.status = request.POST['status']
 		project.name = request.POST['title']
-		project.image = request.FILES['bgImg']
+		if('bgImg' in request.FILES):
+			project.image = request.FILES['bgImg']
 		project.save()
 	except ValueError as e:	# implement a form clean mechanism here.
 		raise PermissionDenied('Error')
