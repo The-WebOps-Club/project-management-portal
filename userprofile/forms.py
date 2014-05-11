@@ -17,3 +17,8 @@ class UserProfileForm(forms.ModelForm):
 		super(UserProfileForm, self).__init__(*args, **kwargs)
 		self.fields.keyOrder = ['first_name', 'last_name', 'ph_num', 'hostel', 'room', 'expertise', 
 			'social_media_URL', 'description', 'pic']
+
+class ChangePasswordForm(forms.Form):
+	current_password = forms.CharField(widget=forms.PasswordInput())
+	new_password = forms.CharField(widget=forms.PasswordInput())
+	repeat_password = forms.CharField(widget=forms.PasswordInput())

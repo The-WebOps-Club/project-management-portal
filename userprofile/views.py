@@ -19,7 +19,26 @@ def account(request):
 	return render(request, 'user/edit_account.html', cd1)
 
 def test(request):
-	return render(request, 'registration/base.html', {'user': request.user})	
+	return render(request, 'registration/base.html', {'user': request.user})
+
+@login_required
+def password(request):
+	if request.method == 'POST':
+		form = ChangePasswordForm(request.POST)
+		u = request.user
+		if form.is_valid():
+			old = form.cleaned_data['current_password']
+			new = form.cleaned_data['new_password']
+			if u.check_password(old):
+				u.set_password(new)
+				u.save()
+				return render(request, 'user/change_password.html', {'user': request.user, 'form': ChangePasswordForm()})
+			else:
+				return render(request, 'user/change_password.html', {'user': request.user, 'form': form, 'auth_fail': 1})
+		else:
+			return render(request, 'user/change_password.html', {'user': request.user, 'form': form})
+	else:
+		return render(request, 'user/change_password.html', {'user': request.user, 'form': ChangePasswordForm()})
 
 @login_required
 def upload(request):

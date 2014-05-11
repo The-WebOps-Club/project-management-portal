@@ -4,6 +4,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = patterns('',
 	url(r'^test/', 'userprofile.views.test'),
 	url(r'^user/', 'userprofile.views.account'),
+	url(r'^password/', 'userprofile.views.password'),
 	url(r'^upload/', 'userprofile.views.upload'),
 	url(r'^password/change/$',
 	                auth_views.password_change,
