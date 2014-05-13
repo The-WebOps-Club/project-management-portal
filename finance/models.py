@@ -3,56 +3,98 @@ from project.models import Project
 
 STATUS = (('approved', 'approved'), ('disapproved', 'disapproved'), ('pending', 'pending'),)
 
-class Advance(models.Model):
-
-	project = models.ForeignKey(Project)
-	applied_date = models.DateField(auto_now_add=True)
-	amount = models.FloatField(default=0, max_length=10)
-	split_up = models.TextField(null=True)
-	is_app_mentor = models.CharField(choices=STATUS, max_length=15)
-	is_app_core = models.CharField(choices=STATUS, max_length=15)
-	approved_date = models.DateField(null=True)
-	received_date = models.DateField(null=True)
-	due_date = models.DateField(null=True)
-	comments = models.TextField(null=True)
+class Installment(models.Model):
+	amount = models.FloatField(max_length=10)
+	date = models.DateField()
 
 	def __unicode__(self):
-		return str(self.project)+'--'+str(self.applied_date)
-
-class Reimbursement(models.Model):
-
-	project = models.ForeignKey(Project)
-	is_app_mentor = models.CharField(choices=STATUS, max_length=15)
-	is_app_core = models.CharField(choices=STATUS, max_length=15)
-	applied_date = models.DateField(auto_now_add=True)
-	received_date = models.DateField(null=True)
-	received = models.FloatField(max_length=10, default=0)
-
-	def amount(self):
-		total = 0
-		bills = Bill.objects.filter(project=self.project)
-		for bill in bills:
-			total+= bill.amount
-		return total
-
-	def is_paid(self):
-		if self.amount == self.received:
-			return True
-		else:
-			return False
-
-	def __unicode__(self):
-		return str(self.project)+'--'+str(self.applied_date)
+		return str(self.amount)+'--'+str(self.date)
 
 class Bill(models.Model):
-	project = models.ForeignKey(Project)
+
 	shop = models.CharField(max_length=40)
 	number = models.CharField(max_length=20)
-	amount = models.FloatField(max_length=10, default=0)
-	date = models.DateField(default=None)
-	advance = models.ForeignKey(Advance)
-	reimb = models.ForeignKey(Reimbursement)
+	amount = models.FloatField(max_length=10)
+	date = models.DateField(default=None, blank=True)
 	image = models.ImageField(upload_to='finance/bills')
 
 	def __unicode__(self):
 		return str(self.shop)+'--'+str(self.number)
+
+class Advance(models.Model):
+
+	project = models.ForeignKey(Project)
+	applied_date = models.DateField(auto_now_add=True)
+	amount = models.FloatField(max_length=10)
+	split_up = models.TextField(null=True, blank=True)
+	is_app_mentor = models.CharField(choices=STATUS, max_length=15, default='pending', blank=True)
+	is_app_core = models.CharField(choices=STATUS, max_length=15, default='pending', blank=True)
+	approved_date = models.DateField(null=True, blank=True)
+	due_date = models.DateField(null=True, blank=True)
+	comments = models.TextField(null=True, blank=True)
+	installments = models.ManyToManyField(Installment, blank=True, null=True)
+	bills = models.ManyToManyField(Bill, blank=True, null=True)
+
+	def __unicode__(self):
+		return str(self.project)+'--'+str(self.applied_date)
+
+	def received(self):
+		total = 0
+		for i in self.installments:
+			total+= i.amount
+		return total
+
+	def remainder(self):
+		return self.amount - self.received()
+
+class Reimbursement(models.Model):
+
+	project = models.ForeignKey(Project)
+	is_app_mentor = models.CharField(choices=STATUS, max_length=15, default='pending', blank=True)
+	is_app_core = models.CharField(choices=STATUS, max_length=15, default='pending', blank=True)
+	applied_date = models.DateField(auto_now_add=True)
+	installments = models.ManyToManyField(Installment, blank=True, null=True)
+	bills = models.ManyToManyField(Bill, blank=True, null=True)
+
+	def amount(self):
+		total = 0
+		for bill in self.bills:
+			total+= bill.amount
+		return total
+
+	def received(self):
+		total = 0
+		for i in self.installments:
+			total+= i.amount
+		return total
+
+	def remainder(self):
+		return self.amount - self.received()
+
+	def __unicode__(self):
+		return str(self.project)+'--'+str(self.applied_date)
+
+class BudgetInfo(models.Model):
+	project = models.ForeignKey(Project)
+	util_budget = models.FloatField(max_length=10, default=0)
+
+	def __unicode__(self):
+		return self.project
+
+	def total_budget(self):
+		return self.project.budget
+
+	def rem_budget(self):
+		return self.total_budget() - self.util_budget
+
+	def due(self):
+		reimbs = Reimbursement.objects.filter(project=self.project)
+		advances = Advance.objects.filter(project=self.project)
+		total = 0
+		for r in reimbs:
+			if r.is_app_core:
+				total+= r.remainder()
+		for a in advances:
+			if a.is_app_core:
+				total+= a.remainder()
+		return total

@@ -101,7 +101,7 @@
 					<li class="heading"><span>Category</span></li>
 					<li class="glyphicons home"><a href="{%url 'dashboard_core'%}"><span>Dashboard</span></a></li>
 					<li class="hasSubmenu">
-						<a data-toggle="collapse" class="glyphicons group" href="#menu_account"><span>My Account</span></a>
+						<a data-toggle="collapse" class="glyphicons settings" href="#menu_account"><span>My Account</span></a>
 						<ul class="menuCollapse" id="menu_account">
 							<li class=""><a href="/account/user/"><span>Edit account</span></a></li>
 							<li class=""><a href="/account/password/"><span>Change Password</span></a></li>
@@ -109,7 +109,7 @@
 						</ul>
 					</li>
 					<li class="hasSubmenu">
-						<a data-toggle="collapse" class="glyphicons settings" href="#menu_components"><span>Links</span></a>
+						<a data-toggle="collapse" class="glyphicons transfer" href="#menu_components"><span>Links</span></a>
 						<ul class="menuCollapse" id="menu_components">
 							<li class=""><a href="http://www.cfi-iitm.org/"><span>CFI</span></a></li>
 							<li class=""><a href="http://www.iitm.ac.in"><span>IIT Madras</span></a></li>
@@ -121,7 +121,7 @@
 				<ul>
 					<li class="heading"><span>Memberships</span></li>
 					<li class="hasSubmenu">
-						<a data-toggle="collapse" class="glyphicons settings" href="#menu_projects"><span>Projects</span></a>
+						<a data-toggle="collapse" class="glyphicons pencil" href="#menu_projects"><span>Projects</span></a>
 						<ul class="menuCollapse" id="menu_projects">
 							<li class=""><a href="{% url 'project:project_all' %}"><span>All Projects</span></a></li>
 							<li class=""><a href="{% url 'project:project_self'%}"><span>My Projects</span></a></li>
@@ -129,7 +129,7 @@
 					</li>
 					<!--<li class="glyphicons notes"><a href="javascript:update_content('Projects');"><span>Projects</span></a></li>-->
 					<li class="hasSubmenu">
-						<a data-toggle="collapse" class="glyphicons settings" href="#menu_clubs"><span>Clubs</span></a>
+						<a data-toggle="collapse" class="glyphicons tower" href="#menu_clubs"><span>Clubs</span></a>
 						<ul class="menuCollapse" id="menu_clubs">
 							{%for club in club_list%}
 							<li class=""><a href="{% url 'project:club_detail' club.pk%}"><span>{{club.name}}</span></a></li>
@@ -137,7 +137,7 @@
 							<li class=""><a href="{% url 'project:club_create'%}">Create a Club</a></li>
 						</ul>
 					</li>
-					<li class="glyphicons notes"><a href="#"><span>People</span></a></li>
+					<li class="glyphicons group"><a href="#"><span>People</span></a></li>
 				</ul>
 				</div>
 				</div>

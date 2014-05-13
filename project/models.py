@@ -33,10 +33,10 @@ class Project( models.Model, Tagged ):
 	status = models.CharField( max_length = 1000 )
 	users = models.ManyToManyField( User , related_name = 'project_member' , blank='true', null='true')
 	mentors = models.ManyToManyField( User, related_name = 'project_mentor' , blank='true', null='true')
-	budget = models.CharField( max_length = 10, blank='true' )
 	documents = models.ManyToManyField( Document , blank='true', null='true')
 	image = models.ImageField( upload_to='repository', default='repository/default.jpg')
-
+	budget = models.FloatField( max_length = 10, blank='true' )
+	
 	def __unicode__( self ):
 		return self.name
 
