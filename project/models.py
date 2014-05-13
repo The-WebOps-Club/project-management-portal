@@ -10,6 +10,9 @@ class Club( models.Model ):
 	cores = models.ManyToManyField( User , blank='true', null='true')
 	image = models.ImageField( upload_to='repository', default='repository/default.jpg' )
 
+	def __unicode__( self ):
+		return self.name
+
 class Document( models.Model, Tagged ):
 
 	name = models.CharField( max_length = 100 )

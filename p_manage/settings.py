@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'project',
     'search',
     'userprofile',
+    'finance',
     'south',
     'dajaxice',
     'registration',
