@@ -34,6 +34,7 @@ class Project( models.Model, Tagged ):
 	users = models.ManyToManyField( User , related_name = 'project_member' , blank='true', null='true')
 	mentors = models.ManyToManyField( User, related_name = 'project_mentor' , blank='true', null='true')
 	budget = models.CharField( max_length = 10, blank='true' )
+	year = models.CharField(max_length=4)
 	documents = models.ManyToManyField( Document , blank='true', null='true')
 	image = models.ImageField( upload_to='repository', default='repository/default.jpg')
 
