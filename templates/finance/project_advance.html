@@ -1,0 +1,107 @@
+{%extends 'base.html'%}
+{% load staticfiles %}
+
+
+{% block head %}
+<script type="text/javascript" src={% static 'split_up.js' %}></script>
+{% endblock %}
+
+
+{%block html_title%}
+{{project.name}} - Finance
+<div class="btn-group" style="margin-left:500px">
+  <button type="button" class="btn btn-default"><a href="../">Info</a></button>
+  <button type="button" class="btn btn-default">Advances</button>
+  <button type="button" class="btn btn-default"><a href="../reimbursement/">Reimbursements</a></button>
+  <button type="button" class="btn btn-default"><a href="../bill/">Bills</a></button>
+</div>
+{%endblock%}
+
+{% block style %}
+#dimmer {
+	background:#000;
+    opacity:0.5;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display:none;
+    z-index:999;
+}
+
+.split_up_div {
+	z-index:2000;
+	display:none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+    background-color:#FFFFFF;
+    padding:10px;
+}
+{% endblock %}
+
+{% block scripts %}
+$(document).ready(function() {
+  ta_to_table();
+});
+
+function ta_to_table() {
+  $('#id_split_up').hide();
+  $('#request_div').append('<br><table class="table table-striped table-bordered table-condensed" id="split_table"><tr><th>Item</th><th>Amount</th></tr><tr><td contenteditable></td><td contenteditable></td></tr></table>');
+  $('#request_div').append('<h5><a href="#" onclick="add_row()">+Add Row</a></h5>');
+}
+
+function add_row() {
+  $('#split_table').append('<tr><td contenteditable></td><td contenteditable></td></tr>');
+}
+
+function table_to_ta() {
+  data=$('#split_table').prop('innerHTML');
+  data=data.replace(/contenteditable=""/g,'');
+  data='<table class="table table-striped table-bordered table-condensed table-hover">'+data+'</table>';
+  data=data.replace(/&nbsp;/g,'').replace(/  /g,'').replace(/\<td \> \<\/td\>/g,'').replace(/\<tr\>\<td \>\<\/td\>\<td \>\<\/td\>\<\/tr\>/g,'');
+  $('#id_split_up').val(data);
+  return true;
+}
+{% endblock %}
+
+
+{%block content %}
+<div id="dimmer" onclick="hide_split()"></div> <!--DO NOT REMOVE-->
+
+{% for a in advances %}
+<div id="adv_split_{{a.id}}" class="split_up_div">
+	{{a.split_up|safe}}
+</div>
+{% endfor %}
+
+<div id="request_form" style="border:1px solid black;margin:5px;padding:5px">
+	<form name="new_adv_form" enctype="multipart/form-data" class="form-horizontal" id='new_adv_form' action="" onsubmit='return table_to_ta()' method=post>
+	{%csrf_token%}
+		<div id="request_div">
+		{{new_form.as_p}}
+		</div>
+		<input type="submit" value="Request" class="btn btn-primary">
+	</form>
+</div>
+
+<div id="pending" style="border:1px solid black;margin:5px;padding:5px">
+	<table class="table table-striped table-bordered table-condensed" id="pending_table">
+		<tr>
+			<th>Applied Date</th>
+			<th>Amount</th>
+		</tr>
+		{% for a in advances %}
+			{% ifequal a.is_app_core 'pending' %}
+				<tr id="advance_{{a.id}}">
+					<td>{{a.applied_date}}</td>
+					<td><a href="#advance_{{a.id}}" onclick="show_split('#adv_split_{{a.id}}')">{{a.amount}}</a></td>
+				</tr>				
+			{% endifequal %}
+		{% endfor %}
+	</table>
+</div>
+{%endblock%}

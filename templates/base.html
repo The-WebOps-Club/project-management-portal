@@ -27,7 +27,8 @@
 		<link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
 		<script type='text/javascript' src= {% static 'jquery.dajax.core.js' %} ></script>	
         {% dajaxice_js_import %}
-	
+        <style type="text/css">{% block style %}{% endblock %}</style>
+		{% block head %}{% endblock %}
 	
 	</head>
 	<body>
@@ -139,6 +140,7 @@
 					</li>
 					<li class="glyphicons group"><a href="#"><span>People</span></a></li>
 				</ul>
+				{% block left_pane %}{% endblock %}
 				</div>
 				</div>
 			

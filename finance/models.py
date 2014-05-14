@@ -26,7 +26,7 @@ class Advance(models.Model):
 	project = models.ForeignKey(Project)
 	applied_date = models.DateField(auto_now_add=True)
 	amount = models.FloatField(max_length=10)
-	split_up = models.TextField(null=True, blank=True)
+	split_up = models.TextField()
 	is_app_mentor = models.CharField(choices=STATUS, max_length=15, default='pending', blank=True)
 	is_app_core = models.CharField(choices=STATUS, max_length=15, default='pending', blank=True)
 	approved_date = models.DateField(null=True, blank=True)
@@ -69,7 +69,7 @@ class Reimbursement(models.Model):
 		return total
 
 	def remainder(self):
-		return self.amount - self.received()
+		return self.amount() - self.received()
 
 	def __unicode__(self):
 		return str(self.project)+'--'+str(self.applied_date)
@@ -96,7 +96,7 @@ class BudgetInfo(models.Model):
 		return total
 
 	def rem_budget(self):
-		return self.total_budget() - self.util_budget
+		return self.total_budget() - self.util_budget()
 
 	def due(self):
 		reimbs = Reimbursement.objects.filter(project=self.project)

@@ -17,19 +17,19 @@ class UserProfile( models.Model ):
 		return self.user.username
 
 	def is_member(self, project):
-		if self.user in project.users:
+		if self.user in project.users.all():
 			return True
 		else:
 			return False
 
 	def is_mentor(self, project):
-		if self.user in project.mentors:
+		if self.user in project.mentors.all():
 			return True
 		else:
 			return False
 
 	def is_in(self, project):
-		if self.is_mentor() or self.is_member():
+		if self.is_mentor(project) or self.is_member(project):
 			return True
 		else:
 			return False
