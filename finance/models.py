@@ -40,7 +40,7 @@ class Advance(models.Model):
 
 	def received(self):
 		total = 0
-		for i in self.installments:
+		for i in self.installments.all():
 			total+= i.amount
 		return total
 
@@ -58,13 +58,13 @@ class Reimbursement(models.Model):
 
 	def amount(self):
 		total = 0
-		for bill in self.bills:
+		for bill in self.bills.all():
 			total+= bill.amount
 		return total
 
 	def received(self):
 		total = 0
-		for i in self.installments:
+		for i in self.installments.all():
 			total+= i.amount
 		return total
 
@@ -76,13 +76,24 @@ class Reimbursement(models.Model):
 
 class BudgetInfo(models.Model):
 	project = models.ForeignKey(Project)
-	util_budget = models.FloatField(max_length=10, default=0)
 
 	def __unicode__(self):
-		return self.project
+		return self.project.name
 
 	def total_budget(self):
-		return self.project.budget
+		return float(self.project.budget)
+
+	def util_budget(self):
+		reimbs = Reimbursement.objects.filter(project=self.project)
+		advances = Advance.objects.filter(project=self.project)
+		total = 0
+		for r in reimbs:
+			if r.is_app_core:
+				total+= r.amount()
+		for a in advances:
+			if a.is_app_core:
+				total+= a.amount
+		return total
 
 	def rem_budget(self):
 		return self.total_budget() - self.util_budget
