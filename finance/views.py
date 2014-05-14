@@ -23,7 +23,7 @@ def project_advance(request, project_id):
 	project = Project.objects.get(id=project_id)
 	if not user.is_in(project):
 		raise Http404	
-	advances = Advance.objects.filter(project=project)
+	advances = Advance.objects.filter(project=project).order_by('applied_date')
 	new_adv_form = NewAdvanceForm(initial={'project':project})
 	cd = {'user': request.user, 'project': project, 'new_form': new_adv_form, 'advances': advances}
 	if user.is_mentor(project):
@@ -39,7 +39,7 @@ def project_reimb(request, project_id):
 	project = Project.objects.get(id=project_id)
 	if not user.is_in(project):
 		raise Http404
-	reimbs = Reimbursement.objects.filter(project=project)
+	reimbs = Reimbursement.objects.filter(project=project).order_by('applied_date')
 
 def project_bills(request, project_id):
 	pass

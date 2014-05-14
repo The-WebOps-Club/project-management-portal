@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from userprofile.ajax import get_profile
 from project.models import Club
+from p_manage.settings import SITE_URL
 
 club_list = Club.objects.all()
 
@@ -57,9 +58,9 @@ def upload(request):
 			u.first_name = form2.cleaned_data['first_name']
 			u.last_name = form2.cleaned_data['last_name']
 			u.save()
-			return HttpResponseRedirect('/account/user/')
+			return HttpResponseRedirect(SITE_URL+'account/user/')
 	else:
-	 	HttpResponseRedirect('/account/user/')
+	 	HttpResponseRedirect(SITE_URL+'account/user/')
 
 
 @login_required

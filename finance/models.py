@@ -36,13 +36,19 @@ class Advance(models.Model):
 	bills = models.ManyToManyField(Bill, blank=True, null=True)
 
 	def __unicode__(self):
-		return str(self.project)+'--'+str(self.applied_date)
+		return str(self.project)+'--'+str(self.applied_date)+'--'+str(self.amount)
 
 	def received(self):
 		total = 0
 		for i in self.installments.all():
 			total+= i.amount
 		return total
+
+	def is_received(self):
+		if self.received() == 0:
+			return False
+		else:
+			return True
 
 	def remainder(self):
 		return self.amount - self.received()
