@@ -1,4 +1,11 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block head %}
+<script type="text/javascript" src={% static 'finance.js' %}></script>
+<link rel="stylesheet" type="text/css" href="{% static 'finance.css' %}">
+{% endblock %}
+
 
 {% block left_pane %}
 <ul>

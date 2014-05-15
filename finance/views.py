@@ -56,6 +56,19 @@ def project_bills(request, project_id, objects, object_id):
 	else:
 		raise Http404
 	bill_form = BillForm()
+	bill_fail = False
 	no_bills = ob.bills.all().count()==0
-	cd = {'user': request.user, 'project': project, 'objects': objects, 'ob': ob, 'no_bills': no_bills, 'bill_form': bill_form }
+
+	if request.method == 'POST':
+		b = BillForm(request.POST, request.FILES)
+		if b.is_valid():
+			bi = b.save()
+			bill_form = BillForm()
+			ob.bills.add(bi)
+		else:
+			bill_form = b
+			bill_fail = True
+
+	cd = {'user': request.user, 'project': project, 'objects': objects, 'ob': ob, 'no_bills': no_bills, 'bill_form': bill_form,}
+	cd['bill_fail'] = bill_fail
 	return render(request, 'finance/bills.html', cd)

@@ -15,11 +15,14 @@ class Bill(models.Model):
 	shop = models.CharField(max_length=40)
 	number = models.CharField(max_length=20)
 	amount = models.FloatField(max_length=10)
-	date = models.DateField(default=None, blank=True)
+	date = models.DateField(default=None, blank=True, null=True)
 	image = models.ImageField(upload_to='finance/bills')
 
 	def __unicode__(self):
 		return str(self.shop)+'--'+str(self.number)
+
+class Collection(models.Model):
+	bills = models.ManyToManyField(Bill)
 
 class Advance(models.Model):
 
@@ -59,8 +62,10 @@ class Reimbursement(models.Model):
 	is_app_mentor = models.CharField(choices=STATUS, max_length=15, default='pending', blank=True)
 	is_app_core = models.CharField(choices=STATUS, max_length=15, default='pending', blank=True)
 	applied_date = models.DateField(auto_now_add=True)
+	approved_date = models.DateField(null=True, blank=True)
 	installments = models.ManyToManyField(Installment, blank=True, null=True)
 	bills = models.ManyToManyField(Bill, blank=True, null=True)
+	comments = models.TextField(null=True, blank=True)
 
 	def amount(self):
 		total = 0
