@@ -4,13 +4,13 @@
 <ul>
 	<li class="heading"><span>Finance</span></li>
 	<li class="hasSubmenu glyphicons stats">
-		<a href="../">Info</a>
+		<a href="{% url 'finance:project_info' project.id %}">Info</a>
 	</li>
 	<li class="hasSubmenu glyphicons briefcase">
-		<a href="../advance/">Advances</a>
+		<a href="{% url 'finance:project_advance' project.id %}">Advances</a>
 	</li>
 	<li class="hasSubmenu glyphicons usd">
-		<a href="../reimbursement/">Reimbursements</a>
+		<a href="{% url 'finance:project_reimbursement' project.id %}">Reimbursements</a>
 	</li>
 </ul>
 {% endblock %}

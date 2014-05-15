@@ -15,4 +15,14 @@ class MentorApprovalForm(forms.ModelForm):
 		model = Advance
 		fields = ('is_app_mentor', 'comments',)
 		readonly_fields = ('project', 'applied_date', 'amount', 'split_up',)
+
+class BillForm(forms.ModelForm):
+
+	class Meta:
+		model = Bill
+
+class InstallmentForm(forms.ModelForm):
+
+	class Meta:
+		model = Installment
 		

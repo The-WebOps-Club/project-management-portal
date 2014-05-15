@@ -41,5 +41,21 @@ def project_reimb(request, project_id):
 		raise Http404
 	reimbs = Reimbursement.objects.filter(project=project).order_by('applied_date')
 
-def project_bills(request, project_id):
-	pass
+def project_bills(request, project_id, objects, object_id):
+	user = UserProfile.objects.get(user=request.user)
+	project = Project.objects.get(id=project_id)
+	print objects
+	if not user.is_in(project):
+		raise Http404
+	if objects == 'advance':
+		ob = Advance.objects.get(id=object_id)
+		if ob.is_app_core != 'approved':
+			raise Http404
+	elif objects == 'reimbursement':
+		ob = Reimbursement.objects.get(id=object_id)
+	else:
+		raise Http404
+	bill_form = BillForm()
+	no_bills = ob.bills.all().count()==0
+	cd = {'user': request.user, 'project': project, 'objects': objects, 'ob': ob, 'no_bills': no_bills, 'bill_form': bill_form }
+	return render(request, 'finance/bills.html', cd)

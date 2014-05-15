@@ -3,12 +3,13 @@
 
 
 {% block head %}
-<script type="text/javascript" src={% static 'split_up.js' %}></script>
+<script type="text/javascript" src={% static 'finance.js' %}></script>
+<link rel="stylesheet" type="text/css" href="{% static 'finance.css' %}">
 {% endblock %}
 
 
 {%block html_title%}
-{{project.name}} - Finance
+{{project.name}} - Advances
 <div class="btn-group" style="margin-left:370px">
  	<button type="button" class="btn btn-default">Request</button>
  	<button type="button" class="btn btn-default">Pending</button>
@@ -19,30 +20,7 @@
 {%endblock%}
 
 {% block style %}
-#dimmer {
-	background:#000;
-    opacity:0.5;
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    display:none;
-    z-index:999;
-}
 
-.split_up_div {
-	z-index:2000;
-	display:none;
-    position: fixed;
-    top: 0%;
-    left: 45%;
-    margin-top: 50px;
-    margin-left: -50px;
-    background-color:#FFFFFF;
-    padding:20px;
-    padding-bottom:0px;
-}
 {% endblock %}
 
 {% block scripts %}
@@ -50,24 +28,6 @@ $(document).ready(function() {
   ta_to_table();
 });
 
-function ta_to_table() {
-  $('#id_split_up').hide();
-  $('#request_div').append('<br><table class="table table-striped table-bordered table-condensed" id="split_table"><tr><th>Item</th><th>Amount</th></tr><tr><td contenteditable></td><td contenteditable></td></tr></table>');
-  $('#request_div').append('<h5><a href="#" onclick="add_row()">+Add Row</a></h5>');
-}
-
-function add_row() {
-  $('#split_table').append('<tr><td contenteditable></td><td contenteditable></td></tr>');
-}
-
-function table_to_ta() {
-  data=$('#split_table').prop('innerHTML');
-  data=data.replace(/contenteditable=""/g,'');
-  data='<table class="table table-striped table-bordered table-condensed table-hover">'+data+'</table>';
-  data=data.replace(/&nbsp;/g,'').replace(/  /g,'').replace(/\<td \> \<\/td\>/g,'').replace(/\<tr\>\<td \>\<\/td\>\<td \>\<\/td\>\<\/tr\>/g,'');
-  $('#id_split_up').val(data);
-  return true;
-}
 {% endblock %}
 
 
@@ -80,7 +40,7 @@ function table_to_ta() {
 </div>
 {% endfor %}
 
-<div id="request_form" style="border:1px solid black;margin:5px;padding:5px">
+<div id="request_form" class="content_divs">
 	<form name="new_adv_form" enctype="multipart/form-data" class="form-horizontal" id='new_adv_form' action="" onsubmit='return table_to_ta()' method=post>
 	{%csrf_token%}
 		<div id="request_div">
@@ -90,7 +50,7 @@ function table_to_ta() {
 	</form>
 </div>
 
-<div id="pending" style="border:1px solid black;margin:5px;padding:5px">
+<div id="pending" class="content_divs">
 	<table class="table table-striped table-bordered table-condensed" id="pending_table">
 		<tr>
 			<th>Applied Date</th>
@@ -107,8 +67,8 @@ function table_to_ta() {
 	</table>
 </div>
 
-<div id="disapproved" style="border:1px solid black;margin:5px;padding:5px">
-	<table class="table table-striped table-bordered table-condensed" id="pending_table">
+<div id="disapproved" class="content_divs">
+	<table class="table table-striped table-bordered table-condensed" id="disapproved_table">
 		<tr>
 			<th>Applied Date</th>
 			<th>Amount</th>
@@ -126,8 +86,8 @@ function table_to_ta() {
 	</table>	
 </div>
 
-<div id="received" style="border:1px solid black;margin:5px;padding:5px">
-	<table class="table table-striped table-bordered table-condensed" id="pending_table">
+<div id="approved" class="content_divs">
+	<table class="table table-striped table-bordered table-condensed" id="approved_table">
 		<tr>
 			<th>Applied Date</th>
 			<th>Amount</th>
@@ -149,8 +109,8 @@ function table_to_ta() {
 	</table>	
 </div>
 
-<div id="history" style="border:1px solid black;margin:5px;padding:5px">
-	<table class="table table-striped table-bordered table-condensed" id="pending_table">
+<div id="history" class="content_divs">
+	<table class="table table-striped table-bordered table-condensed" id="history_table">
 		<tr>
 			<th>Applied Date</th>
 			<th>Amount</th>

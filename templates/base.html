@@ -64,13 +64,13 @@
 										<a href="#" style="padding-left: 30px; font-size: 12px;">{{user.email}}</a>
 									</li>  
 									<li>
-										<a href="/account/user/">Settings</a>
+										<a href="{% url 'edit_account' %}">Settings</a>
 									</li>
 									<li>
-										<a href="/account/password/">Change Password</a>
+										<a href="{% url 'edit_password' %}">Change Password</a>
 									</li>  
 									<li>
-										<a href="/account/logout/">Logout</a>
+										<a href="{% url 'auth_logout' %}">Logout</a>
 									</li>
                                </ul> 
 															  </li>  
@@ -104,9 +104,9 @@
 					<li class="hasSubmenu">
 						<a data-toggle="collapse" class="glyphicons settings" href="#menu_account"><span>My Account</span></a>
 						<ul class="menuCollapse" id="menu_account">
-							<li class=""><a href="/account/user/"><span>Edit account</span></a></li>
-							<li class=""><a href="/account/password/"><span>Change Password</span></a></li>
-							<li class=""><a href="/account/logout/"><span>Logout</span></a></li>
+							<li class=""><a href="{% url 'edit_account' %}"><span>Edit account</span></a></li>
+							<li class=""><a href="{% url 'edit_password' %}"><span>Change Password</span></a></li>
+							<li class=""><a href="{% url 'auth_logout' %}"><span>Logout</span></a></li>
 						</ul>
 					</li>
 					<li class="hasSubmenu">

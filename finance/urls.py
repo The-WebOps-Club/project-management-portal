@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
 	url(r'^project/(?P<project_id>\d+)/advance/$', 'finance.views.project_advance', name='project_advance'),
 	url(r'^project/(?P<project_id>\d+)/reimbursement/$', 'finance.views.project_reimb', name='project_reimbursement'),
-	url(r'^project/(?P<project_id>\d+)/bill/$', 'finance.views.project_bills', name='project_bill'),
+	url(r'^project/(?P<project_id>\d+)/bill/(?P<objects>[a-z]+)/(?P<object_id>\d+)/$', 'finance.views.project_bills', name='project_bill'),
 	url(r'^project/(?P<project_id>\d+)/$', 'finance.views.project_info', name='project_info'),
 
 	url(r'^core/advance/$', 'finance.views.core_advance', name='core_advance'),
