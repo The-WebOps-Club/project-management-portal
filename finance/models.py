@@ -22,7 +22,14 @@ class Bill(models.Model):
 		return str(self.shop)+'--'+str(self.number)
 
 class Collection(models.Model):
+
 	bills = models.ManyToManyField(Bill)
+	
+	def amount(self):
+		total = 0
+		for bill in self.bills.all():
+			total+= bill.amount
+		return total
 
 class Advance(models.Model):
 

@@ -1,0 +1,14 @@
+{%extends 'finance/base.html'%}
+{% load staticfiles %}
+
+
+{%block html_title%}
+{{project.name}} - Reimbursements
+<div class="btn-group" style="margin-left:370px">
+ 	<button type="button" class="btn btn-default">Request</button>
+ 	<button type="button" class="btn btn-default">Pending</button>
+ 	<button type="button" class="btn btn-default">Approved</button>
+ 	<button type="button" class="btn btn-default">Disapproved</button>
+ 	<button type="button" class="btn btn-default">History</button>
+</div>
+{%endblock%}

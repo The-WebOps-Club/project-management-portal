@@ -3,7 +3,8 @@ from finance.models import *
 from finance.forms import *
 from project.models import Project
 from userprofile.models import UserProfile
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 
 def core_home(request):
@@ -34,17 +35,44 @@ def project_advance(request, project_id):
 		cd['new_req_forms'] = mentor_forms
 	return render(request, 'finance/project_advance.html', cd)
 
-def project_reimb(request, project_id):
+def project_reimb(request, project_id, col_id=None):
 	user = UserProfile.objects.get(user=request.user)
 	project = Project.objects.get(id=project_id)
 	if not user.is_in(project):
 		raise Http404
+	if not col_id:
+		initial = True
+	else:
+		initial = False
 	reimbs = Reimbursement.objects.filter(project=project).order_by('applied_date')
+	bill_form = BillForm()
+	bill_fail = False
+	no_bills = True
+	if request.method == 'POST':
+		b = BillForm(request.POST, request.FILES)
+		if b.is_valid():
+			bi = b.save()
+			bill_form = BillForm()
+			if initial:
+				col = Collection()
+				col_id = col.id
+			else:
+				col = Collection.objects.get(id=col_id)
+			col.bills.add(bi)
+		else:
+			bill_form = b
+			bill_fail = True
+	if col_id:
+		cd['col'] = col
+		no_bills = col.bills.all.count() == 0
+	cd = {'user': request.user, 'project': project, 'bill_fail': bill_fail, 'no_bills': no_bills, 'bill_form': bill_form,}
+	if initial and col_id:
+		return HttpResponseRedirect(reverse('project_reimbursement_2', args=[project.id, col_id]))
+	return render(request, 'finance/project_reimbursement.html', cd)
 
 def project_bills(request, project_id, objects, object_id):
 	user = UserProfile.objects.get(user=request.user)
 	project = Project.objects.get(id=project_id)
-	print objects
 	if not user.is_in(project):
 		raise Http404
 	if objects == 'advance':
