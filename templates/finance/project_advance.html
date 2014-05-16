@@ -35,12 +35,12 @@ $(document).ready(function() {
 {% endfor %}
 
 <div id="request_form" class="content_divs">
-	<form name="new_adv_form" enctype="multipart/form-data" class="form-horizontal" id='new_adv_form' action="" onsubmit='return table_to_ta()' method=post>
+	<form name="new_adv_form" enctype="multipart/form-data" class="form-horizontal" id='new_adv_form' action="." onsubmit='return table_to_ta()' method=post>
 	{%csrf_token%}
 		<div id="request_div">
 		{{new_form.as_p}}
 		</div>
-		<input type="submit" value="Request" class="btn btn-primary">
+		<h3 style="text-align:center"><input type="submit" value="Send Request" class="btn btn-primary"></h3>
 	</form>
 </div>
 
@@ -51,7 +51,7 @@ $(document).ready(function() {
 			<th>Amount</th>
 		</tr>
 		{% for a in advances %}
-			{% if a.is_app_core == "pending" %}
+			{% if a.is_app_core == "pending" and a.is_app_mentor != "disapproved" %}
 				<tr id="advance_{{a.id}}">
 					<td>{{a.applied_date}}</td>
 					<td><a href="#advance_{{a.id}}" onclick="show_split('#adv_split_{{a.id}}')">{{a.amount}}</a></td>
@@ -112,6 +112,7 @@ $(document).ready(function() {
 			<th>Approved Date</th>
 			<th>Received</th>
 			<th>Comments</th>
+			<th>Bills</th>
 		</tr>
 		{% for a in advances %}
 				<tr id="advance_{{a.id}}">
@@ -129,6 +130,11 @@ $(document).ready(function() {
 					<td>{{a.approved_date}}</td>
 					<td>{{a.received}}</td>
 					<td>{{a.comments}}</td>
+					<td>
+						{% if a.is_received %}
+							<a href="{% url 'finance:project_bill' project.id 'advance' a.id %}"><span class="glyphicon glyphicon-list-alt"></span></a>
+						{% endif %}
+					</td>
 				</tr>	
 		{% endfor %}
 	</table>	

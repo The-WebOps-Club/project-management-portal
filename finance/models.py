@@ -24,12 +24,15 @@ class Bill(models.Model):
 class Collection(models.Model):
 
 	bills = models.ManyToManyField(Bill)
-	
+
 	def amount(self):
 		total = 0
 		for bill in self.bills.all():
 			total+= bill.amount
 		return total
+
+	def __unicode__(self):
+		return 'Collection--'+str(self.id)
 
 class Advance(models.Model):
 
@@ -55,10 +58,7 @@ class Advance(models.Model):
 		return total
 
 	def is_received(self):
-		if self.received() == 0:
-			return False
-		else:
-			return True
+		return self.received() != 0
 
 	def remainder(self):
 		return self.amount - self.received()
@@ -88,6 +88,14 @@ class Reimbursement(models.Model):
 
 	def remainder(self):
 		return self.amount() - self.received()
+
+	def status(self):
+		if self.is_app_core == 'approved':
+			return 'approved'
+		elif self.is_app_core == 'disapproved' or self.is_app_mentor == 'disapproved':
+			return 'disapproved'
+		else:
+			return 'pending'
 
 	def __unicode__(self):
 		return str(self.project)+'--'+str(self.applied_date)

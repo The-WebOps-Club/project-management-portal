@@ -25,7 +25,7 @@ def project_advance(request, project_id):
 	if not user.is_in(project):
 		raise Http404	
 	advances = Advance.objects.filter(project=project).order_by('applied_date')
-	new_adv_form = NewAdvanceForm(initial={'project':project})
+	new_adv_form = NewAdvanceForm(initial={'project':project,})
 	cd = {'user': request.user, 'project': project, 'new_form': new_adv_form, 'advances': advances}
 	if user.is_mentor(project):
 		pen_adv = Advance.objects.filter(is_app_mentor=False)
@@ -33,11 +33,19 @@ def project_advance(request, project_id):
 		for adv in pen_adv:
 			mentor_forms.append(MentorApprovalForm(instance=adv))
 		cd['new_req_forms'] = mentor_forms
+
+	if request.method == 'POST':
+		new_adv = NewAdvanceForm(request.POST)
+		if new_adv.is_valid():
+			new_adv.save()
+		else:
+			cd['new_form'] = new_adv
 	return render(request, 'finance/project_advance.html', cd)
 
 def project_reimb(request, project_id, col_id=None):
 	user = UserProfile.objects.get(user=request.user)
 	project = Project.objects.get(id=project_id)
+	cd={}
 	if not user.is_in(project):
 		raise Http404
 	if not col_id:
@@ -55,7 +63,9 @@ def project_reimb(request, project_id, col_id=None):
 			bill_form = BillForm()
 			if initial:
 				col = Collection()
+				col.save()
 				col_id = col.id
+				print col
 			else:
 				col = Collection.objects.get(id=col_id)
 			col.bills.add(bi)
@@ -63,12 +73,26 @@ def project_reimb(request, project_id, col_id=None):
 			bill_form = b
 			bill_fail = True
 	if col_id:
+		col = Collection.objects.get(id=col_id)
 		cd['col'] = col
-		no_bills = col.bills.all.count() == 0
-	cd = {'user': request.user, 'project': project, 'bill_fail': bill_fail, 'no_bills': no_bills, 'bill_form': bill_form,}
+		no_bills = col.bills.all().count() == 0
+	cd.update({'user': request.user, 'project': project, 'reimbs': reimbs, 'bill_fail': bill_fail, 'no_bills': no_bills, 'bill_form': bill_form,})
 	if initial and col_id:
-		return HttpResponseRedirect(reverse('project_reimbursement_2', args=[project.id, col_id]))
+		return HttpResponseRedirect(reverse('finance:project_reimbursement_2', args=[project.id, col_id]))
 	return render(request, 'finance/project_reimbursement.html', cd)
+
+def project_reimb_save(request, project_id, col_id):
+	user = UserProfile.objects.get(user=request.user)
+	project = Project.objects.get(id=project_id)
+	if not user.is_in(project):
+		raise Http404
+	col = Collection.objects.get(id=col_id)
+	r = Reimbursement(project=project)
+	r.save()
+	for c in col.bills.all():
+		r.bills.add(c)
+	col.delete()
+	return HttpResponseRedirect(reverse('finance:project_reimbursement', args=[project.id]))
 
 def project_bills(request, project_id, objects, object_id):
 	user = UserProfile.objects.get(user=request.user)
