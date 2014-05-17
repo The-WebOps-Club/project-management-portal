@@ -9,7 +9,7 @@ urlpatterns = patterns('',
 	url(r'^project/(?P<project_id>\d+)/$', 'finance.views.project_info', name='project_info'),
 
 	url(r'^core/advance/$', 'finance.views.core_advance', name='core_advance'),
-	url(r'^core/reimbursement/$', 'finance.views.core_reimb', name='core_reimb'),
+	url(r'^core/reimbursement/$', 'finance.views.core_reimb', name='core_reimbursement'),
 	url(r'^core/$', 'finance.views.core_home', name='core_home'),
 
 )

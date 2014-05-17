@@ -49,7 +49,7 @@ $(document).ready(function() {
 </div>
 
 <div id="pending" class="content_divs">
-	<table class="table table-striped table-bordered table-condensed" id="pending_table">
+	<table class="table table-striped table-bordered table-condensed data_tables" id="pending_table">
 		<tr>
 			<th>Applied Date</th>
 			<th>Amount</th>
@@ -66,7 +66,7 @@ $(document).ready(function() {
 </div>
 
 <div id="disapproved" class="content_divs">
-	<table class="table table-striped table-bordered table-condensed" id="disapproved_table">
+	<table class="table table-striped table-bordered table-condensed data_tables" id="disapproved_table">
 		<tr>
 			<th>Applied Date</th>
 			<th>Amount</th>
@@ -85,13 +85,15 @@ $(document).ready(function() {
 </div>
 
 <div id="approved" class="content_divs">
-	<table class="table table-striped table-bordered table-condensed" id="approved_table">
+	<table class="table table-striped table-bordered table-condensed data_tables" id="approved_table">
 		<tr>
 			<th>Applied Date</th>
 			<th>Amount</th>
 			<th>Approved Date</th>
 			<th>Received</th>
+			<th>Due Date</th>
 			<th>Comments</th>
+			<th>Bills</th>
 		</tr>
 		{% for a in advances %}
 			{% if a.is_app_core == "approved" %}
@@ -100,7 +102,13 @@ $(document).ready(function() {
 					<td><a href="#advance_{{a.id}}" onclick="show_split('#adv_split_{{a.id}}')">{{a.amount}}</a></td>
 					<td>{{a.approved_date}}</td>
 					<td>{{a.received}}</td>
+					<td>{{a.due_date}}</td>
 					<td>{{a.comments}}</td>
+					<td>
+						{% if a.is_received %}
+							<a href="{% url 'finance:project_bill' project.id 'advance' a.id %}" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a>
+						{% endif %}
+					</td>
 				</tr>				
 			{% endif %}
 		{% endfor %}
@@ -108,13 +116,14 @@ $(document).ready(function() {
 </div>
 
 <div id="history" class="content_divs">
-	<table class="table table-striped table-bordered table-condensed" id="history_table">
+	<table class="table table-striped table-bordered table-condensed data_tables" id="history_table">
 		<tr>
 			<th>Applied Date</th>
 			<th>Amount</th>
 			<th>Status</th>
 			<th>Approved Date</th>
 			<th>Received</th>
+			<th>Due Date</th>
 			<th>Comments</th>
 			<th>Bills</th>
 		</tr>
@@ -133,10 +142,11 @@ $(document).ready(function() {
 					</td>
 					<td>{{a.approved_date}}</td>
 					<td>{{a.received}}</td>
+					<td>{{a.due_date}}</td>
 					<td>{{a.comments}}</td>
 					<td>
 						{% if a.is_received %}
-							<a href="{% url 'finance:project_bill' project.id 'advance' a.id %}"><span class="glyphicon glyphicon-list-alt"></span></a>
+							<a href="{% url 'finance:project_bill' project.id 'advance' a.id %}" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a>
 						{% endif %}
 					</td>
 				</tr>	
@@ -149,7 +159,7 @@ $(document).ready(function() {
 	<input type="hidden" name="form_type" value="mentor">
 	{% csrf_token %}
 	{{formset_data}}
-		<table class="table table-striped table-bordered table-condensed" enctype="multipart/form-data" class="form-horizontal" id="mentor_approval_table">
+		<table class="table table-striped table-bordered table-condensed data_tables" enctype="multipart/form-data" class="form-horizontal" id="mentor_approval_table">
 			<tr>
 				<th>Applied Date</th>
 				<th>Amount</th>

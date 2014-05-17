@@ -5,13 +5,58 @@ from project.models import Project
 from userprofile.models import UserProfile
 from django.http import Http404, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.forms import HiddenInput
 
 
 def core_home(request):
 	pass
 
 def core_advance(request):
-	pass
+	user = UserProfile.objects.get(user=request.user)
+	if not user.is_finance_core:
+		raise Http404
+
+	form_fail_p = False
+	form_fail_a = False
+	form_fail_i = False
+	if request.method == 'POST':
+		if request.POST['form_type'] == 'pending':
+			formset = CoreApprovalFormset(request.POST)
+			if formset.is_valid():
+				formset.save()
+			else:
+				form_fail_p = True
+				pending_forms = formset
+		elif request.POST['form_type'] == 'new_ins':
+			new = InstallmentForm(request.POST)
+			if new.is_valid():
+				adv = Advance.objects.get(id=request.POST['adv_id'])
+				n = new.save()
+				adv.installments.add(n)
+			else:
+				form_fail_i = True
+				install_form = new
+
+	pending = Advance.objects.filter(is_app_core='pending').filter(is_app_mentor='approved').order_by('-applied_date')
+	approved = Advance.objects.filter(is_app_core='approved').order_by('applied_date')
+	if not form_fail_p:
+		pending_forms = CoreApprovalFormset(queryset=pending)
+	if not form_fail_a:
+		approved_forms = CoreApprovedFormset(queryset=approved)
+	if not form_fail_i:
+		install_form = InstallmentForm()
+	pen = []
+	app = []
+	for p in range(len(pending)):
+		pen.append([pending[p], pending_forms[p]])
+	for p in range(len(approved)):
+		app.append([approved[p], approved_forms[p]])	
+	cd = {'user': request.user, 'pending': pen, 'approved': app, 'p_extra': pending_forms[-1], 'a_extra': approved_forms[-1]}
+	cd['p_data'] = pending_forms.management_form
+	cd['a_data'] = approved_forms.management_form
+	cd['new_ins_form'] = install_form
+	cd.update({'form_fail_i': form_fail_i, 'form_fail_p': form_fail_p, 'form_fail_a': form_fail_a})
+	return render(request, 'finance/core_advance.html', cd)
 
 def core_reimb(request):
 	pass
@@ -38,7 +83,7 @@ def project_advance(request, project_id):
 		else:
 			formset = MentorApprovalFormset(request.POST, prefix='mentor_formset')
 			if formset.is_valid():
-				new = formset.save()
+				formset.save()
 
 	if user.is_mentor(project):
 		mentor_forms = []
@@ -76,7 +121,6 @@ def project_reimb(request, project_id, col_id=None):
 					col = Collection()
 					col.save()
 					col_id = col.id
-					print col
 				else:
 					col = Collection.objects.get(id=col_id)
 				col.bills.add(bi)
@@ -123,7 +167,11 @@ def project_reimb_save(request, project_id, col_id):
 def project_bills(request, project_id, objects, object_id):
 	user = UserProfile.objects.get(user=request.user)
 	project = Project.objects.get(id=project_id)
-	if not user.is_in(project):
+	if user.is_in(project):
+		is_in = True
+	elif user.is_finance_core:
+		is_in = False
+	else:
 		raise Http404
 	if objects == 'advance':
 		ob = Advance.objects.get(id=object_id)

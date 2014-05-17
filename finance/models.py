@@ -40,8 +40,8 @@ class Advance(models.Model):
 	applied_date = models.DateField(auto_now_add=True)
 	amount = models.FloatField(max_length=10)
 	split_up = models.TextField()
-	is_app_mentor = models.CharField(choices=STATUS, max_length=15, default='pending', blank=True)
-	is_app_core = models.CharField(choices=STATUS, max_length=15, default='pending', blank=True)
+	is_app_mentor = models.CharField(choices=STATUS, max_length=15, default='pending', blank=False)
+	is_app_core = models.CharField(choices=STATUS, max_length=15, default='pending', blank=False)
 	approved_date = models.DateField(null=True, blank=True)
 	due_date = models.DateField(null=True, blank=True)
 	comments = models.TextField(null=True, blank=True)
@@ -63,11 +63,19 @@ class Advance(models.Model):
 	def remainder(self):
 		return self.amount - self.received()
 
+	def ins_as_table(self):
+		string = '<table class="table table-striped table-bordered table-condensed id="adv_ins_table">'
+		string+= '<tr><th>Date</th><th>Amount</th></tr>'
+		for i in self.installments.all():
+			string+= '<tr><td>'+str(i.date.strftime('%d %b %Y'))+'</td><td>'+str(i.amount)+'</td></tr>'
+		string+= '</table>'
+		return string
+
 class Reimbursement(models.Model):
 
 	project = models.ForeignKey(Project)
-	is_app_mentor = models.CharField(choices=STATUS, max_length=15, default='pending', blank=True)
-	is_app_core = models.CharField(choices=STATUS, max_length=15, default='pending', blank=True)
+	is_app_mentor = models.CharField(choices=STATUS, max_length=15, default='pending', blank=False)
+	is_app_core = models.CharField(choices=STATUS, max_length=15, default='pending', blank=False)
 	applied_date = models.DateField(auto_now_add=True)
 	approved_date = models.DateField(null=True, blank=True)
 	installments = models.ManyToManyField(Installment, blank=True, null=True)

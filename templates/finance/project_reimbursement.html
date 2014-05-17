@@ -5,6 +5,9 @@
 {%block html_title%}
 {{project.name}} - Reimbursements
 <div class="btn-group" style="margin-left:370px">
+	{% if is_mentor %}
+	<button type="button" class="btn btn-default">New Requests</button>
+	{% endif %}
  	<button type="button" class="btn btn-default">Request</button>
  	<button type="button" class="btn btn-default">Pending</button>
  	<button type="button" class="btn btn-default">Approved</button>
@@ -21,8 +24,6 @@
 		show_split('#add_bill_form');
 	});
 {% endif %}
-
-window.is_bill = true
 
 {% endblock %}
 
@@ -41,7 +42,7 @@ window.is_bill = true
 	</div>
 {% endfor %}
 <div id="add_bill_form" class="split_up_div">
-	<form name="new_bill_form" enctype="multipart/form-data" class="form-horizontal" id='new_bill_form' action="" method=post>
+	<form name="new_bill_form" enctype="multipart/form-data" class="form-horizontal" id='new_bill_form' action="." method=post>
 	{%csrf_token%}
 	<input type="hidden" name="form_type" value="add_bill">
 		<div id="request_div">
@@ -58,7 +59,7 @@ window.is_bill = true
 	{% if no_bills %}
 		<h4 id="no_bill_notif" style="text-align:center;margin-top:20px;">Add bills to request a reimbursement</h4>
 	{% else %}
-		<table class="table table-striped table-bordered table-condensed" id="bills_table">
+		<table class="table table-striped table-bordered table-condensed data_tables" id="bills_table">
 			<tr>
 				<th>Shop</th>
 				<th>Bill Number</th>
@@ -84,7 +85,7 @@ window.is_bill = true
 </div>
 
 <div id="pending_div" class="content_divs">	
-	<table class="table table-striped table-bordered table-condensed" id="pending_table">
+	<table class="table table-striped table-bordered table-condensed data_tables" id="pending_table">
 		<tr>
 			<th>Applied Date</th>
 			<th>Amount</th>
@@ -95,7 +96,7 @@ window.is_bill = true
 			<tr id="pending_{{r.id}}">
 				<td>{{r.applied_date}}</td>
 				<td>{{r.amount}}</td>
-				<td><a href="{% url 'finance:project_bill' project.id 'reimbursement' r.id %}"><span class="glyphicon glyphicon-list-alt"></span></a></td>
+				<td><a href="{% url 'finance:project_bill' project.id 'reimbursement' r.id %}" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a></td>
 			</tr>
 			{% endif %}
 		{% endfor %}
@@ -103,7 +104,7 @@ window.is_bill = true
 </div>
 
 <div id="disapproved_div" class="content_divs">
-	<table class="table table-striped table-bordered table-condensed" id="approved_table">
+	<table class="table table-striped table-bordered table-condensed data_tables" id="approved_table">
 		<tr>
 			<th>Applied Date</th>
 			<th>Amount</th>
@@ -116,7 +117,7 @@ window.is_bill = true
 				<td>{{r.applied_date}}</td>
 				<td>{{r.amount}}</td>
 				<td>{{r.comments}}</td>
-				<td><a href="{% url 'finance:project_bill' project.id 'reimbursement' r.id %}"><span class="glyphicon glyphicon-list-alt"></span></a></td>
+				<td><a href="{% url 'finance:project_bill' project.id 'reimbursement' r.id %}" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a></td>
 			</tr>
 			{% endif %}
 		{% endfor %}
@@ -124,7 +125,7 @@ window.is_bill = true
 </div>
 
 <div id="approved_div" class="content_divs">
-	<table class="table table-striped table-bordered table-condensed" id="approved_table">
+	<table class="table table-striped table-bordered table-condensed data_tables" id="approved_table">
 		<tr>
 			<th>Applied Date</th>
 			<th>Amount</th>
@@ -141,7 +142,7 @@ window.is_bill = true
 				<td>{{r.approved_date}}</td>
 				<td>{{r.received}}</td>
 				<td>{{r.comments}}</td>
-				<td><a href="{% url 'finance:project_bill' project.id 'reimbursement' r.id %}"><span class="glyphicon glyphicon-list-alt"></span></a></td>
+				<td><a href="{% url 'finance:project_bill' project.id 'reimbursement' r.id %}" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a></td>
 			</tr>
 			{% endif %}
 		{% endfor %}
@@ -149,7 +150,7 @@ window.is_bill = true
 </div>
 
 <div id="history_div" class="content_divs">
-	<table class="table table-striped table-bordered table-condensed" id="history_table">
+	<table class="table table-striped table-bordered table-condensed data_tables" id="history_table">
 		<tr>
 			<th>Applied Date</th>
 			<th>Amount</th>
@@ -175,7 +176,7 @@ window.is_bill = true
 			<td>{{r.approved_date}}</td>
 			<td>{{r.received}}</td>
 			<td>{{r.comments}}</td>
-			<td><a href="{% url 'finance:project_bill' project.id 'reimbursement' r.id %}"><span class="glyphicon glyphicon-list-alt"></span></a></td>
+			<td><a href="{% url 'finance:project_bill' project.id 'reimbursement' r.id %}" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a></td>
 		</tr>
 		{% endfor %}
 	</table>
@@ -186,7 +187,7 @@ window.is_bill = true
 	<input type="hidden" name="form_type" value="mentor">
 	{% csrf_token %}
 	{{formset_data}}
-		<table class="table table-striped table-bordered table-condensed" enctype="multipart/form-data" class="form-horizontal" id="mentor_approval_table">
+		<table class="table table-striped table-bordered table-condensed data_tables" enctype="multipart/form-data" class="form-horizontal" id="mentor_approval_table">
 			<tr>
 				<th>Applied Date</th>
 				<th>Amount</th>

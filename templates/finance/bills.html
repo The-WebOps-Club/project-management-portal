@@ -10,8 +10,6 @@
 	});
 {% endif %}
 
-window.is_bill = true
-
 {% endblock %}
 
 
@@ -95,7 +93,7 @@ window.is_bill = true
 {% endif %}
 
 {% if no_bills %}
-<h4 id="no_bill_notif" style="text-align:center;margin-top:20px;">You haven't added any bills yet</h4>
+<h4 id="no_bill_notif" style="text-align:center;margin-top:20px;">No bills added yet</h4>
 {% else %}
 <div id="bills_div" class="content_divs">
 	<table class="table table-striped table-bordered table-condensed" id="bills_table">
@@ -117,7 +115,7 @@ window.is_bill = true
 		{% endfor %}
 	</table>
 	{% endif %}
-	{% if objects == "advance" %}
+	{% if objects == "advance" and is_in %}
 	<h5 style="margin:0px;margin-bottom:10px;text-align:center"><a href="#add_bill" onclick="show_split('#add_bill_form')">+Add Bills</a></h5>
 	{% endif %}
 </div>

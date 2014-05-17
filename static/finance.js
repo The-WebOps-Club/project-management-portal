@@ -18,6 +18,12 @@ function hide_split() {
 	window.is_dim = false
 }
 
+function new_installment(adv_id) {
+	hide_split();
+	show_split('#new_ins_form');
+	$('#request_div_ins').append('<input type="hidden" name="adv_id" id="adv_identifier" value="'+adv_id+'">')
+}
+
 function ta_to_table() {
   $('#id_split_up').hide();
   $('#request_div').append('<br><table class="table table-striped table-bordered table-condensed" id="split_table"><tr><th>Item</th><th>Amount</th></tr><tr><td contenteditable></td><td contenteditable></td></tr></table>');
@@ -42,9 +48,30 @@ $(document).keyup(function(e) {
 });
 
 $(document).ready(function() {
-  	if(typeof(is_bill) != "undefined" && is_bill !== null) {
-    	$('#id_date_month').css('width',120);
-    	$('#id_date_day').css('width',70);
-    	$('#id_date_year').css('width',80);
-	}  
+    	$('[name*="date_month"]').each(function() {
+			$(this).css('width',120);
+		});
+    	$('[name*="date_day"]').each(function() {
+			$(this).css('width',70);
+		});
+    	$('[name*="date_year"]').each(function() {
+			$(this).css('width',80);
+		});
+    	$('[name*="is_app"]').each(function() {
+			$(this).css('width',120);
+		});
+		$('[name*="comments"]').each(function() {
+			$(this).css('width',300);
+		});
+		$('[type="number"]').each(function() {
+			$(this).css('padding',0);
+		});
+		$('.data_tables').each( function() {
+			a=$(this).find('tr').length;
+			if(a==1) {
+				$(this).parent().prepend('<h4 class="no_data_h4" style="text-align:center">No entries</h4>');
+				$(this).parent().children().hide();
+				$('.no_data_h4').show();
+			}
+		});
 });
