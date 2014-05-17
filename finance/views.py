@@ -39,9 +39,6 @@ def project_advance(request, project_id):
 			formset = MentorApprovalFormset(request.POST, prefix='mentor_formset')
 			if formset.is_valid():
 				new = formset.save()
-				print new, 'if-cond-satis'
-			else:
-				print formset.errors, 'else-cond'
 
 	if user.is_mentor(project):
 		mentor_forms = []
@@ -50,7 +47,6 @@ def project_advance(request, project_id):
 		for i in range(len(queryset)):
 			mentor_forms.append([queryset[i], formset[i]])
 		extra_form = formset[-1]
-		print formset
 		cd.update({'extra_form': extra_form, 'is_mentor': True, 'new_req_forms': mentor_forms})
 		cd['formset_data'] = formset.management_form
 
@@ -71,21 +67,37 @@ def project_reimb(request, project_id, col_id=None):
 	bill_fail = False
 	no_bills = True
 	if request.method == 'POST':
-		b = BillForm(request.POST, request.FILES)
-		if b.is_valid():
-			bi = b.save()
-			bill_form = BillForm()
-			if initial:
-				col = Collection()
-				col.save()
-				col_id = col.id
-				print col
+		if request.POST['form_type'] == 'add_bill':
+			b = BillForm(request.POST, request.FILES)
+			if b.is_valid():
+				bi = b.save()
+				bill_form = BillForm()
+				if initial:
+					col = Collection()
+					col.save()
+					col_id = col.id
+					print col
+				else:
+					col = Collection.objects.get(id=col_id)
+				col.bills.add(bi)
 			else:
-				col = Collection.objects.get(id=col_id)
-			col.bills.add(bi)
+				bill_form = b
+				bill_fail = True
 		else:
-			bill_form = b
-			bill_fail = True
+			formset = MentorApprovalFormset2(request.POST, prefix='mentor_formset')
+			if formset.is_valid():
+				new = formset.save()
+
+	if user.is_mentor(project):
+		mentor_forms = []
+		queryset=Reimbursement.objects.filter(is_app_mentor='pending').order_by('applied_date')
+		formset = MentorApprovalFormset2(queryset=queryset, prefix='mentor_formset')
+		for i in range(len(queryset)):
+			mentor_forms.append([queryset[i], formset[i]])
+		extra_form = formset[-1]
+		cd.update({'extra_form': extra_form, 'is_mentor': True, 'new_req_forms': mentor_forms})
+		cd['formset_data'] = formset.management_form
+
 	if col_id:
 		col = Collection.objects.get(id=col_id)
 		cd['col'] = col

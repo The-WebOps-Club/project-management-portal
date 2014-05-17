@@ -33,7 +33,12 @@ class MentorApprovalForm2(forms.ModelForm):
 		model = Reimbursement
 		fields = ('project', 'is_app_mentor', 'comments',)
 		readonly_fields = ('project', )
-		widgets = {'project': HiddenInput,}
+		widgets = {
+			'project': forms.HiddenInput,
+			'comments': forms.Textarea(attrs={'cols': 70, 'rows': 3}),
+		}
+
+MentorApprovalFormset2 = modelformset_factory(Reimbursement, form=MentorApprovalForm2)
 
 class BillForm(forms.ModelForm):
 

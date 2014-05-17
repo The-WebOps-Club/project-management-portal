@@ -43,6 +43,7 @@ window.is_bill = true
 <div id="add_bill_form" class="split_up_div">
 	<form name="new_bill_form" enctype="multipart/form-data" class="form-horizontal" id='new_bill_form' action="" method=post>
 	{%csrf_token%}
+	<input type="hidden" name="form_type" value="add_bill">
 		<div id="request_div">
 		{{bill_form.as_p}}
 		</div>
@@ -178,6 +179,35 @@ window.is_bill = true
 		</tr>
 		{% endfor %}
 	</table>
+</div>
+
+<div id="mentor_approval" class="content_divs">
+	<form action="." method=post id="mentor_formset">
+	<input type="hidden" name="form_type" value="mentor">
+	{% csrf_token %}
+	{{formset_data}}
+		<table class="table table-striped table-bordered table-condensed" enctype="multipart/form-data" class="form-horizontal" id="mentor_approval_table">
+			<tr>
+				<th>Applied Date</th>
+				<th>Amount</th>
+				<th>Status</th>
+				<th>Comment</th>
+				<th>Bills</th>
+			</tr>
+			{% for a in new_req_forms %}
+			<tr>
+				<td>{{a.0.applied_date}}</td>
+				<td><a href="#advance_{{a.0.id}}" onclick="show_split('#adv_split_{{a.0.id}}')">{{a.0.amount}}</a></td>
+				<td>{{a.1.is_app_mentor}}</td>
+				<td>{{a.1.comments}}</td>
+				<td><a href="{% url 'finance:project_bill' project.id 'reimbursement' a.0.id %}" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a></td>
+				{{a.1.id}}{{a.1.project}}			
+			</tr>			
+			{% endfor %}
+		</table>
+		<div id="hidden_form" style="display:none">{{extra_form}}</div>
+		<h3 style="text-align:center"><input type="submit" value="Save" class="btn btn-primary"></h3>
+	</form>
 </div>
 
 {% endblock %}
