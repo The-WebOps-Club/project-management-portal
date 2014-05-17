@@ -27,19 +27,33 @@ def project_advance(request, project_id):
 	advances = Advance.objects.filter(project=project).order_by('applied_date')
 	new_adv_form = NewAdvanceForm(initial={'project':project,})
 	cd = {'user': request.user, 'project': project, 'new_form': new_adv_form, 'advances': advances}
-	if user.is_mentor(project):
-		pen_adv = Advance.objects.filter(is_app_mentor=False)
-		mentor_forms = []
-		for adv in pen_adv:
-			mentor_forms.append(MentorApprovalForm(instance=adv))
-		cd['new_req_forms'] = mentor_forms
 
 	if request.method == 'POST':
-		new_adv = NewAdvanceForm(request.POST)
-		if new_adv.is_valid():
-			new_adv.save()
+		if request.POST['form_type'] == 'new_advance':
+			new_adv = NewAdvanceForm(request.POST)
+			if new_adv.is_valid():
+				new_adv.save()
+			else:
+				cd['new_form'] = new_adv
 		else:
-			cd['new_form'] = new_adv
+			formset = MentorApprovalFormset(request.POST, prefix='mentor_formset')
+			if formset.is_valid():
+				new = formset.save()
+				print new, 'if-cond-satis'
+			else:
+				print formset.errors, 'else-cond'
+
+	if user.is_mentor(project):
+		mentor_forms = []
+		queryset=Advance.objects.filter(is_app_mentor='pending').order_by('applied_date')
+		formset = MentorApprovalFormset(queryset=queryset, prefix='mentor_formset')
+		for i in range(len(queryset)):
+			mentor_forms.append([queryset[i], formset[i]])
+		extra_form = formset[-1]
+		print formset
+		cd.update({'extra_form': extra_form, 'is_mentor': True, 'new_req_forms': mentor_forms})
+		cd['formset_data'] = formset.management_form
+
 	return render(request, 'finance/project_advance.html', cd)
 
 def project_reimb(request, project_id, col_id=None):
