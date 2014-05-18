@@ -44,6 +44,7 @@ class Migration(SchemaMigration):
             ('desc', self.gf('django.db.models.fields.CharField')(max_length=2000)),
             ('status', self.gf('django.db.models.fields.CharField')(max_length=1000)),
             ('budget', self.gf('django.db.models.fields.CharField')(max_length=10)),
+            ('year', self.gf('django.db.models.fields.CharField')(max_length=4)),
         ))
         db.send_create_signal(u'project', ['Project'])
 
@@ -239,6 +240,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Project'},
             'brief': ('django.db.models.fields.CharField', [], {'max_length': '400'}),
             'budget': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
+            'year': ('django.db.models.fields.CharField', [], {'max_length': '4'}),
             'club': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'parent_club'", 'to': u"orm['project.Club']"}),
             'desc': ('django.db.models.fields.CharField', [], {'max_length': '2000'}),
             'documents': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['project.Document']", 'symmetrical': 'False'}),

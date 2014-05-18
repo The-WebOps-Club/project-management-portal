@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     url( r'^admin/', include(admin.site.urls)),
     url( r'^account/', include('userprofile.urls')),
     url( r'^finance/', include('finance.urls', namespace='finance')),
-    url( r'^$', RedirectView.as_view( url = settings.LOGIN_URL )), # testing base template. to be replaced with index.html soon.
+    url( r'^$', RedirectView.as_view( url = settings.SITE_URL+'account/user/' )), # testing base template. to be replaced with index.html soon.
     url( r'^', include('project.urls', namespace = 'project' ) ),
     url( r'^dashboard/core/$',core_dashboard, name='dashboard_core'),
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),

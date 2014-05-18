@@ -45,7 +45,7 @@ class CreateTask( CreateView ):
 
 class CreateProject( CreateView ):
 	model = Project
-	fields = ['name','desc','status','budget']
+	fields = ['name','desc','status','budget','year']
 
 	def form_valid( self, form ):
 		if( not PermissionHandler.create_project(self.request.user, **self.kwargs ) ): # check for permission using the permissions module.
