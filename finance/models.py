@@ -43,7 +43,6 @@ class Advance(models.Model):
 	is_app_mentor = models.CharField(choices=STATUS, max_length=15, default='pending', blank=False)
 	is_app_core = models.CharField(choices=STATUS, max_length=15, default='pending', blank=False)
 	approved_date = models.DateField(null=True, blank=True)
-	due_date = models.DateField(null=True, blank=True)
 	comments = models.TextField(null=True, blank=True)
 	installments = models.ManyToManyField(Installment, blank=True, null=True)
 	bills = models.ManyToManyField(Bill, blank=True, null=True)
@@ -64,7 +63,7 @@ class Advance(models.Model):
 		return self.amount - self.received()
 
 	def ins_as_table(self):
-		string = '<table class="table table-striped table-bordered table-condensed id="adv_ins_table">'
+		string = '<table class="table table-striped table-bordered table-condensed data_tables" id="adv_ins_table">'
 		string+= '<tr><th>Date</th><th>Amount</th></tr>'
 		for i in self.installments.all():
 			string+= '<tr><td>'+str(i.date.strftime('%d %b %Y'))+'</td><td>'+str(i.amount)+'</td></tr>'
@@ -104,6 +103,14 @@ class Reimbursement(models.Model):
 			return 'disapproved'
 		else:
 			return 'pending'
+
+	def ins_as_table(self):
+		string = '<table class="table table-striped table-bordered table-condensed data_tables" id="adv_ins_table">'
+		string+= '<tr><th>Date</th><th>Amount</th></tr>'
+		for i in self.installments.all():
+			string+= '<tr><td>'+str(i.date.strftime('%d %b %Y'))+'</td><td>'+str(i.amount)+'</td></tr>'
+		string+= '</table>'
+		return string
 
 	def __unicode__(self):
 		return str(self.project)+'--'+str(self.applied_date)

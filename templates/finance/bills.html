@@ -37,7 +37,7 @@
 			<div id="request_div">
 			{{bill_form.as_p}}
 			</div>
-			<input type="submit" value="Request" class="btn btn-primary">
+			<input type="submit" value="Save" class="btn btn-primary">
 		</form>
 	</div>
 
@@ -74,7 +74,7 @@
 			</tr>
 			<tr>
 				<td>{{ob.applied_date}}</td>
-				<td><a href="#object" onclick="show_split('#object_split')">{{ob.amount}}</a></td>
+				<td>{{ob.amount}}</td>
 				<td>
 					{% if ob.is_app_core == "disapproved" or ob.is_app_mentor == "disapproved" %}
 						<span class="label label-danger">Disapproved</span>

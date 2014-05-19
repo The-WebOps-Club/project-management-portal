@@ -7,7 +7,7 @@ Advances
 	<button type="button" class="btn btn-default">New Requests</button>
  	<button type="button" class="btn btn-default">Approved Requests</button>
 </div>
-{%endblock%}
+{% endblock %}
 
 
 {% block scripts %}
@@ -46,7 +46,7 @@ Advances
 </div>
 <div id="adv_ins_{{a.0.id}}" class="split_up_div">
 	<h4 style="text-align:center;color:#37a6cd">Total : {{a.0.received}}</h4>
-	{{a.0.ins_as_table|safe}}
+	<div>{{a.0.ins_as_table|safe}}</div>
 	<h5 style="margin:0px;margin-bottom:10px;text-align:center"><a href="#advance_{{a.0.id}}" onclick="new_installment({{a.0.id}})">+Add Installment</a></h5>
 </div>
 {% endfor %}
@@ -62,7 +62,6 @@ Advances
 				<th>Applied Date</th>
 				<th>Amount</th>
 				<th>Status</th>
-				<th>Due Date</th>
 				<th>Comment</th>
 			</tr>
 			{% for a in pending %}
@@ -71,7 +70,6 @@ Advances
 				<td>{{a.0.applied_date}}</td>
 				<td><a href="#advance_{{a.0.id}}" onclick="show_split('#adv_split_{{a.0.id}}')">{{a.0.amount}}</a></td>
 				<td>{{a.1.is_app_core}}</td>
-				<td>{{a.1.due_date}}</td>
 				<td>{{a.1.comments}}</td>
 				{{a.1.id}}{{a.1.project}}{{a.1.split_up}}{{a.1.amount}}{{a.1.is_app_mentor}}				
 			</tr>			
@@ -92,8 +90,8 @@ Advances
 				<th>Project</th>
 				<th>Applied Date</th>
 				<th>Amount</th>
+				<th>Approved Date</th>
 				<th>Received</th>
-				<th>Due Date</th>
 				<th>Comment</th>
 				<th>Bills</th>
 			</tr>
@@ -102,12 +100,8 @@ Advances
 				<td>{{a.0.project.name}}</td>
 				<td>{{a.0.applied_date}}</td>
 				<td><a href="#advance_{{a.0.id}}" onclick="show_split('#adv_split_{{a.0.id}}')">{{a.0.amount}}</a></td>
-				{% if a.0.is_received %}
+				<td>{{a.0.approved_date}}</td>
 				<td><a href="#advance_{{a.0.id}}" onclick="show_split('#adv_ins_{{a.0.id}}')">{{a.0.received}}</a></td>
-				{% else %}
-				<td>{{a.0.received}}</td>
-				{% endif %}
-				<td>{{a.1.due_date}}</td>
 				<td>{{a.1.comments}}</td>
 				<td>
 					{% if a.0.is_received %}

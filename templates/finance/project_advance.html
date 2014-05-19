@@ -91,7 +91,6 @@ $(document).ready(function() {
 			<th>Amount</th>
 			<th>Approved Date</th>
 			<th>Received</th>
-			<th>Due Date</th>
 			<th>Comments</th>
 			<th>Bills</th>
 		</tr>
@@ -102,7 +101,6 @@ $(document).ready(function() {
 					<td><a href="#advance_{{a.id}}" onclick="show_split('#adv_split_{{a.id}}')">{{a.amount}}</a></td>
 					<td>{{a.approved_date}}</td>
 					<td>{{a.received}}</td>
-					<td>{{a.due_date}}</td>
 					<td>{{a.comments}}</td>
 					<td>
 						{% if a.is_received %}
@@ -123,7 +121,6 @@ $(document).ready(function() {
 			<th>Status</th>
 			<th>Approved Date</th>
 			<th>Received</th>
-			<th>Due Date</th>
 			<th>Comments</th>
 			<th>Bills</th>
 		</tr>
@@ -142,7 +139,6 @@ $(document).ready(function() {
 					</td>
 					<td>{{a.approved_date}}</td>
 					<td>{{a.received}}</td>
-					<td>{{a.due_date}}</td>
 					<td>{{a.comments}}</td>
 					<td>
 						{% if a.is_received %}

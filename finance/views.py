@@ -6,6 +6,7 @@ from userprofile.models import UserProfile
 from django.http import Http404, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.forms import HiddenInput
+from datetime import date
 
 
 def core_home(request):
@@ -23,7 +24,11 @@ def core_advance(request):
 		if request.POST['form_type'] == 'pending':
 			formset = CoreApprovalFormset(request.POST)
 			if formset.is_valid():
-				formset.save()
+				new = formset.save()
+				for n in new:
+					if n.is_app_core == 'approved':
+						n.approved_date = date.today()
+						n.save()
 			else:
 				form_fail_p = True
 				pending_forms = formset
@@ -36,6 +41,13 @@ def core_advance(request):
 			else:
 				form_fail_i = True
 				install_form = new
+		else:
+			formset = CoreApprovedFormset(request.POST)
+			if formset.is_valid():
+				formset.save()
+			else:
+				form_fail_a = True
+				approved_forms = formset
 
 	pending = Advance.objects.filter(is_app_core='pending').filter(is_app_mentor='approved').order_by('-applied_date')
 	approved = Advance.objects.filter(is_app_core='approved').order_by('applied_date')
@@ -59,7 +71,63 @@ def core_advance(request):
 	return render(request, 'finance/core_advance.html', cd)
 
 def core_reimb(request):
-	pass
+	user = UserProfile.objects.get(user=request.user)
+	if not user.is_finance_core:
+		raise Http404
+
+	form_fail_p = False
+	form_fail_a = False
+	form_fail_i = False
+	if request.method == 'POST':
+		if request.POST['form_type'] == 'pending':
+			formset = CoreApprovalFormset2(request.POST)
+			if formset.is_valid():
+				new = formset.save()
+				print new
+				for n in new:
+					if n.is_app_core == 'approved':
+						n.approved_date = date.today()
+						n.save()
+			else:
+				form_fail_p = True
+				pending_forms = formset
+		elif request.POST['form_type'] == 'new_ins':
+			new = InstallmentForm(request.POST)
+			if new.is_valid():
+				adv = Reimbursement.objects.get(id=request.POST['adv_id'])
+				n = new.save()
+				adv.installments.add(n)
+			else:
+				form_fail_i = True
+				install_form = new
+		else:
+			formset = CoreApprovedFormset2(request.POST)
+			if formset.is_valid():
+				formset.save()
+			else:
+				form_fail_a = True
+				approved_forms = formset
+
+	pending = Reimbursement.objects.filter(is_app_core='pending').filter(is_app_mentor='approved').order_by('-applied_date')
+	approved = Reimbursement.objects.filter(is_app_core='approved').order_by('applied_date')
+	if not form_fail_p:
+		pending_forms = CoreApprovalFormset2(queryset=pending)
+	if not form_fail_a:
+		approved_forms = CoreApprovedFormset2(queryset=approved)
+	if not form_fail_i:
+		install_form = InstallmentForm()
+	pen = []
+	app = []
+	for p in range(len(pending)):
+		pen.append([pending[p], pending_forms[p]])
+	for p in range(len(approved)):
+		app.append([approved[p], approved_forms[p]])	
+	cd = {'user': request.user, 'pending': pen, 'approved': app, 'p_extra': pending_forms[-1], 'a_extra': approved_forms[-1]}
+	cd['p_data'] = pending_forms.management_form
+	cd['a_data'] = approved_forms.management_form
+	cd['new_ins_form'] = install_form
+	cd.update({'form_fail_i': form_fail_i, 'form_fail_p': form_fail_p, 'form_fail_a': form_fail_a})
+	return render(request, 'finance/core_reimbursement.html', cd)
 
 def project_info(request, project_id):
 	pass
@@ -195,6 +263,6 @@ def project_bills(request, project_id, objects, object_id):
 			bill_form = b
 			bill_fail = True
 
-	cd = {'user': request.user, 'project': project, 'objects': objects, 'ob': ob, 'no_bills': no_bills, 'bill_form': bill_form,}
+	cd = {'user': request.user, 'project': project,'is_in': is_in, 'objects': objects, 'ob': ob, 'no_bills': no_bills, 'bill_form': bill_form,}
 	cd['bill_fail'] = bill_fail
 	return render(request, 'finance/bills.html', cd)

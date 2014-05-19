@@ -65,14 +65,13 @@ class CoreApprovalForm(forms.ModelForm):
 	
 	class Meta:
 		model = Advance
-		fields = ('project', 'amount', 'split_up', 'is_app_mentor', 'is_app_core', 'due_date', 'comments',)
+		fields = ('project', 'amount', 'split_up', 'is_app_mentor', 'is_app_core', 'comments',)
 		readonly_fields = ('project', 'is_app_mentor', 'is_app_core', 'split_up', 'amount',)
 		widgets = {
 			'project': forms.HiddenInput,
 			'amount': forms.HiddenInput,
 			'split_up': forms.HiddenInput,
 			'is_app_mentor': forms.HiddenInput,
-			'due_date': SelectDateWidget,
 			'is_app_core': forms.Select(attrs={'class':'status_field'}),
 			'comments': forms.Textarea(attrs={'rows':3, 'cols': 40}),
 		}
@@ -87,15 +86,45 @@ class CoreApprovedForm(forms.ModelForm):
 	
 	class Meta:
 		model = Advance
-		fields = ('project', 'amount', 'split_up', 'is_app_mentor', 'is_app_core', 'due_date', 'comments', 'installments')
+		fields = ('project', 'amount', 'split_up', 'is_app_mentor', 'is_app_core', 'approved_date', 'comments', 'installments')
 		widgets = {
 			'project': forms.HiddenInput,
 			'amount': forms.HiddenInput,
+			'approved_date': forms.HiddenInput,
 			'split_up': forms.HiddenInput,
 			'is_app_mentor': forms.HiddenInput,
-			'due_date': SelectDateWidget,
 			'is_app_core': forms.HiddenInput,
 			'comments': forms.Textarea(attrs={'rows':3, 'cols': 40}),
 		}
 
-CoreApprovedFormset = modelformset_factory(Advance, form=CoreApprovedForm)	
+CoreApprovedFormset = modelformset_factory(Advance, form=CoreApprovedForm)
+
+class CoreApprovalForm2(forms.ModelForm):
+	
+	class Meta:
+		model = Reimbursement
+		fields = ('project', 'is_app_mentor', 'is_app_core', 'comments',)
+		readonly_fields = ('project', 'is_app_mentor', 'is_app_core',)
+		widgets = {
+			'project': forms.HiddenInput,
+			'is_app_mentor': forms.HiddenInput,
+			'is_app_core': forms.Select(attrs={'class':'status_field'}),
+			'comments': forms.Textarea(attrs={'rows':3, 'cols': 40}),
+		}
+
+CoreApprovalFormset2 = modelformset_factory(Reimbursement, form=CoreApprovalForm2)	
+
+class CoreApprovedForm2(forms.ModelForm):
+	
+	class Meta:
+		model = Reimbursement
+		fields = ('project', 'is_app_mentor', 'is_app_core', 'approved_date', 'comments', 'installments')
+		widgets = {
+			'project': forms.HiddenInput,
+			'approved_date': forms.HiddenInput,
+			'is_app_mentor': forms.HiddenInput,
+			'is_app_core': forms.HiddenInput,
+			'comments': forms.Textarea(attrs={'rows':3, 'cols': 40}),
+		}
+
+CoreApprovedFormset2 = modelformset_factory(Reimbursement, form=CoreApprovedForm2)
