@@ -4,8 +4,8 @@
 {%block html_title%}
 Reimbursements
 <div class="btn-group" style="margin-left:530px">
-	<button type="button" class="btn btn-default">New Requests</button>
- 	<button type="button" class="btn btn-default">Approved Requests</button>
+	<button type="button" class="btn btn-default" onclick="content_splitter('#core_pending')">New Requests</button>
+ 	<button type="button" class="btn btn-default" onclick="content_splitter('#core_approved')">Approved Requests</button>
 </div>
 {% endblock %}
 
@@ -51,7 +51,8 @@ Reimbursements
 </div>
 {% endfor %}
 
-<div id="core_pending" class="content_divs">
+<div id="core_pending" class="content_divs first_con_div">
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">Pending Approval</h4>
 	<form action="." method=post id="pending_formset">
 	<input type="hidden" name="form_type" value="pending">
 	{% csrf_token %}
@@ -83,6 +84,7 @@ Reimbursements
 </div>
 
 <div id="core_approved" class="content_divs">
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">Approved Reimbursements</h4>
 	<form action="." method=post id="approved_formset">
 	<input type="hidden" name="form_type" value="approved">
 	{% csrf_token %}

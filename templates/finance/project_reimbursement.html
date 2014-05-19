@@ -4,15 +4,15 @@
 
 {%block html_title%}
 {{project.name}} - Reimbursements
-<div class="btn-group" style="margin-left:370px">
+<div class="btn-group" style="margin-left:300px">
 	{% if is_mentor %}
-	<button type="button" class="btn btn-default">New Requests</button>
+	<button type="button" class="btn btn-default" onclick="content_splitter('#mentor_approval')">New Requests</button>
 	{% endif %}
- 	<button type="button" class="btn btn-default">Request</button>
- 	<button type="button" class="btn btn-default">Pending</button>
- 	<button type="button" class="btn btn-default">Approved</button>
- 	<button type="button" class="btn btn-default">Disapproved</button>
- 	<button type="button" class="btn btn-default">History</button>
+ 	<button type="button" class="btn btn-default" onclick="content_splitter('#request_form')">Request</button>
+ 	<button type="button" class="btn btn-default" onclick="content_splitter('#pending_div')">Pending</button>
+ 	<button type="button" class="btn btn-default" onclick="content_splitter('#approved_div')">Approved</button>
+ 	<button type="button" class="btn btn-default" onclick="content_splitter('#disapproved_div')">Disapproved</button>
+ 	<button type="button" class="btn btn-default" onclick="content_splitter('#history_div')">History</button>
 </div>
 {%endblock%}
 
@@ -52,13 +52,17 @@
 	</form>
 </div>
 
-<div id="request_new" class="content_divs">
+{% if is_mentor %}
+<div id="request_form" class="content_divs">
+{% else %}
+<div id="request_form" class="content_divs first_con_div">
+{% endif %}
+<h4 style="text-align:center;color:#37a6cd;margin:10px">Request Reimbursement</h4>
 	{% if not no_bills %}
 	<h4 style="color:#37a6cd">Total : {{col.amount}}</h4>
 	{% endif %}
-	{% if no_bills %}
-		<h4 id="no_bill_notif" style="text-align:center;margin-top:20px;">Add bills to request a reimbursement</h4>
-	{% else %}
+	{% if not no_bills %}
+	<div>
 		<table class="table table-striped table-bordered table-condensed data_tables" id="bills_table">
 			<tr>
 				<th>Shop</th>
@@ -77,6 +81,7 @@
 			</tr>
 			{% endfor %}
 		</table>
+	</div>
 	{% endif %}
 	<h5 style="margin:0px;margin-bottom:10px;text-align:center"><a href="#add_bill" onclick="show_split('#add_bill_form')">+Add Bills</a></h5>
 	{% if not no_bills %}
@@ -85,6 +90,8 @@
 </div>
 
 <div id="pending_div" class="content_divs">	
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">Pending Approval</h4>
+	<div>
 	<table class="table table-striped table-bordered table-condensed data_tables" id="pending_table">
 		<tr>
 			<th>Applied Date</th>
@@ -101,9 +108,12 @@
 			{% endif %}
 		{% endfor %}
 	</table>
+	</div>
 </div>
 
 <div id="disapproved_div" class="content_divs">
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">Disapproved Reimbursements</h4>
+	<div>
 	<table class="table table-striped table-bordered table-condensed data_tables" id="approved_table">
 		<tr>
 			<th>Applied Date</th>
@@ -122,9 +132,12 @@
 			{% endif %}
 		{% endfor %}
 	</table>
+	</div>
 </div>
 
 <div id="approved_div" class="content_divs">
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">Approved Reimbursements</h4>
+	<div>
 	<table class="table table-striped table-bordered table-condensed data_tables" id="approved_table">
 		<tr>
 			<th>Applied Date</th>
@@ -147,9 +160,12 @@
 			{% endif %}
 		{% endfor %}
 	</table>
+	</div>
 </div>
 
 <div id="history_div" class="content_divs">
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">History</h4>
+	<div>
 	<table class="table table-striped table-bordered table-condensed data_tables" id="history_table">
 		<tr>
 			<th>Applied Date</th>
@@ -180,9 +196,11 @@
 		</tr>
 		{% endfor %}
 	</table>
+	</div>
 </div>
 
-<div id="mentor_approval" class="content_divs">
+<div id="mentor_approval" class="content_divs first_con_div">
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">New Requests</h4>
 	<form action="." method=post id="mentor_formset">
 	<input type="hidden" name="form_type" value="mentor">
 	{% csrf_token %}

@@ -6,13 +6,13 @@
 {{project.name}} - Advances
 <div class="btn-group" style="margin-left:370px">
 	{% if is_mentor %}
-	<button type="button" class="btn btn-default">New Requests</button>
+	<button type="button" class="btn btn-default" onclick="content_splitter('#mentor_approval')">New Requests</button>
 	{% endif %}
-	<button type="button" class="btn btn-default">Request</button>
- 	<button type="button" class="btn btn-default">Pending</button>
- 	<button type="button" class="btn btn-default">Approved</button>
- 	<button type="button" class="btn btn-default">Disapproved</button>
- 	<button type="button" class="btn btn-default">History</button>
+	<button type="button" class="btn btn-default" onclick="content_splitter('#request_form')">Request</button>
+ 	<button type="button" class="btn btn-default" onclick="content_splitter('#pending')">Pending</button>
+ 	<button type="button" class="btn btn-default" onclick="content_splitter('#approved')">Approved</button>
+ 	<button type="button" class="btn btn-default" onclick="content_splitter('#disapproved')">Disapproved</button>
+ 	<button type="button" class="btn btn-default" onclick="content_splitter('#history')">History</button>
 </div>
 {%endblock%}
 
@@ -37,7 +37,12 @@ $(document).ready(function() {
 </div>
 {% endfor %}
 
+{% if is_mentor %}
 <div id="request_form" class="content_divs">
+{% else %}
+<div id="request_form" class="content_divs first_con_div">
+{% endif %}
+<h4 style="text-align:center;color:#37a6cd;margin:10px">Request Advance</h4>
 	<form name="new_adv_form" enctype="multipart/form-data" class="form-horizontal" id='new_adv_form' action="." onsubmit='return table_to_ta()' method=post>
 	<input type="hidden" name="form_type" value="new_advance">
 	{%csrf_token%}
@@ -49,6 +54,8 @@ $(document).ready(function() {
 </div>
 
 <div id="pending" class="content_divs">
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">Pending Approval</h4>
+	<div>
 	<table class="table table-striped table-bordered table-condensed data_tables" id="pending_table">
 		<tr>
 			<th>Applied Date</th>
@@ -63,9 +70,12 @@ $(document).ready(function() {
 			{% endif %}
 		{% endfor %}
 	</table>
+	</div>
 </div>
 
 <div id="disapproved" class="content_divs">
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">Disapproved Advances</h4>
+	<div>
 	<table class="table table-striped table-bordered table-condensed data_tables" id="disapproved_table">
 		<tr>
 			<th>Applied Date</th>
@@ -81,10 +91,13 @@ $(document).ready(function() {
 				</tr>				
 			{% endif %}
 		{% endfor %}
-	</table>	
+	</table>
+	</div>	
 </div>
 
 <div id="approved" class="content_divs">
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">Approved Advances</h4>
+	<div>
 	<table class="table table-striped table-bordered table-condensed data_tables" id="approved_table">
 		<tr>
 			<th>Applied Date</th>
@@ -111,9 +124,12 @@ $(document).ready(function() {
 			{% endif %}
 		{% endfor %}
 	</table>	
+	</div>
 </div>
 
 <div id="history" class="content_divs">
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">History</h4>
+	<div>
 	<table class="table table-striped table-bordered table-condensed data_tables" id="history_table">
 		<tr>
 			<th>Applied Date</th>
@@ -147,10 +163,12 @@ $(document).ready(function() {
 					</td>
 				</tr>	
 		{% endfor %}
-	</table>	
+	</table>
+	</div>	
 </div>
 
-<div id="mentor_approval" class="content_divs">
+<div id="mentor_approval" class="content_divs first_con_div">
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">New Requests</h4>
 	<form action="." method=post id="mentor_formset">
 	<input type="hidden" name="form_type" value="mentor">
 	{% csrf_token %}

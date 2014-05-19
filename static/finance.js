@@ -43,6 +43,11 @@ function table_to_ta() {
   return true;
 }
 
+function content_splitter(string) {
+	$('.content_divs').hide();
+	$(string).show();
+}
+
 $(document).keyup(function(e) {
   if (e.keyCode == 27 && is_dim == true) hide_split() 
 });
@@ -74,4 +79,7 @@ $(document).ready(function() {
 				$('.no_data_h4').show();
 			}
 		});
+
+		$('.content_divs').hide();
+		$('.first_con_div').show();
 });
