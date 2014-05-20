@@ -24,6 +24,11 @@
 		show_split('#add_bill_form');
 	});
 {% endif %}
+{%  if post %}
+	$(document).ready(function() {
+		location.reload();
+	});
+{% endif %}
 
 {% endblock %}
 
@@ -36,10 +41,13 @@
 		<img src="{{bill.image.url}}" style="height:400px;"></img>
 	</div>
 {% endfor %}
-{% for bill in reimbs.bills.all %}
-	<div id="soft_bill_{{bill.id}}" class="split_up_div">
-		<img src="{{bill.image.url}}" style="height:400px;"></img>
-	</div>
+{% for a in reimbs %}
+{% if a.is_received %}
+<div id="reimb_rec_{{a.id}}" class="split_up_div">
+	<h4 style="text-align:center;color:#37a6cd">Total : {{a.received}}</h4>
+	<div>{{a.ins_as_table|safe}}</div>
+</div>
+{% endif %}
 {% endfor %}
 <div id="add_bill_form" class="split_up_div">
 	<form name="new_bill_form" enctype="multipart/form-data" class="form-horizontal" id='new_bill_form' action="." method=post>
@@ -153,7 +161,11 @@
 				<td>{{r.applied_date}}</td>
 				<td>{{r.amount}}</td>
 				<td>{{r.approved_date}}</td>
+				{% if r.is_received %}
+				<td><a href="#history_{{r.id}}" onclick="show_split('#reimb_rec_{{r.id}}')">{{r.received}}</a></td>
+				{% else %}
 				<td>{{r.received}}</td>
+				{% endif %}
 				<td>{{r.comments}}</td>
 				<td><a href="{% url 'finance:project_bill' project.id 'reimbursement' r.id %}" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a></td>
 			</tr>
@@ -190,7 +202,11 @@
 				{% endif %}
 			</td>
 			<td>{{r.approved_date}}</td>
+			{% if r.is_received %}
+			<td><a href="#history_{{r.id}}" onclick="show_split('#reimb_rec_{{r.id}}')">{{r.received}}</a></td>
+			{% else %}
 			<td>{{r.received}}</td>
+			{% endif %}
 			<td>{{r.comments}}</td>
 			<td><a href="{% url 'finance:project_bill' project.id 'reimbursement' r.id %}" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a></td>
 		</tr>

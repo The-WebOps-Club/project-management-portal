@@ -9,6 +9,11 @@
 		show_split('#add_bill_form');
 	});
 {% endif %}
+{%  if post %}
+	$(document).ready(function() {
+		location.reload();
+	});
+{% endif %}
 
 {% endblock %}
 

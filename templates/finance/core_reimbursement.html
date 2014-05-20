@@ -16,6 +16,11 @@ Reimbursements
 		show_split('#new_ins_form');
 	});
 {% endif %}
+{%  if post %}
+	$(document).ready(function() {
+		location.reload();
+	});
+{% endif %}
 {% endblock %}
 
 

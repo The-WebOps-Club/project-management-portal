@@ -93,6 +93,12 @@ class Reimbursement(models.Model):
 			total+= i.amount
 		return total
 
+	def is_received(self):
+		if self.received() == 0:
+			return False
+		else:
+			return True
+
 	def remainder(self):
 		return self.amount() - self.received()
 

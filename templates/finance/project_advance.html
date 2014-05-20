@@ -24,7 +24,11 @@
 $(document).ready(function() {
   ta_to_table();
 });
-
+{%  if post %}
+	$(document).ready(function() {
+		location.reload();
+	});
+{% endif %}
 {% endblock %}
 
 
@@ -35,6 +39,12 @@ $(document).ready(function() {
 <div id="adv_split_{{a.id}}" class="split_up_div">
 	{{a.split_up|safe}}
 </div>
+{% if a.is_received %}
+<div id="adv_rec_{{a.id}}" class="split_up_div">
+	<h4 style="text-align:center;color:#37a6cd">Total : {{a.received}}</h4>
+	<div>{{a.ins_as_table|safe}}</div>
+</div>
+{% endif %}
 {% endfor %}
 
 {% if is_mentor %}
@@ -113,7 +123,11 @@ $(document).ready(function() {
 					<td>{{a.applied_date}}</td>
 					<td><a href="#advance_{{a.id}}" onclick="show_split('#adv_split_{{a.id}}')">{{a.amount}}</a></td>
 					<td>{{a.approved_date}}</td>
+					{% if a.is_received %}
+					<td><a href="#advance_{{a.id}}" onclick="show_split('#adv_rec_{{a.id}}')">{{a.received}}</a></td>
+					{% else %}
 					<td>{{a.received}}</td>
+					{% endif %}
 					<td>{{a.comments}}</td>
 					<td>
 						{% if a.is_received %}
@@ -154,7 +168,11 @@ $(document).ready(function() {
 						{% endif %}
 					</td>
 					<td>{{a.approved_date}}</td>
+					{% if a.is_received %}
+					<td><a href="#history_{{a.id}}" onclick="show_split('#adv_rec_{{a.id}}')">{{a.received}}</a></td>
+					{% else %}
 					<td>{{a.received}}</td>
+					{% endif %}
 					<td>{{a.comments}}</td>
 					<td>
 						{% if a.is_received %}
