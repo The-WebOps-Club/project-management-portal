@@ -13,6 +13,7 @@ from django.core.exceptions import PermissionDenied
 from project.permissions import PermissionHandler
 from project.models import *
 from project.views import *
+import datetime
 
 
 # some function decorators
@@ -36,20 +37,22 @@ def value_error_feedback( in_func ):
 
 @dajaxice_register
 def create_blank_project( request, **kwargs):
-	if( not PermissionHandler.create_project(request.user, **kwargs ) ): # check for permission using the permissions module.
-		raise PermissionDenied( 'You do NOT have permission to create a project :P' )
+  if( not PermissionHandler.create_project(request.user, **kwargs ) ): # check for permission using the permissions module.
+    raise PermissionDenied( 'You do NOT have permission to create a project :P' )
 
-	project = Project()
-	project.desc = 'Detailed Writeup'
-	project.brief = 'Brief Writeup'
-	project.status = 'Sample Status'
-	project.name = 'Sample Name'
-	project.club = get_object_or_404( Club, pk = kwargs['club'])
-	project.save()
+  project = Project()
+  project.desc = 'Detailed Writeup'
+  project.brief = 'Brief Writeup'
+  project.status = 'Sample Status'
+  project.name = 'Sample Name'
+  project.budget = 0
+  project.year = str(datetime.datetime.today().year)
+  project.club = get_object_or_404( Club, pk = kwargs['club'])
+  project.save()
 
-	dajax = Dajax()
-	dajax.script('window.location=\''+reverse('project:project_detail', args=[project.pk])+'\'')
-	return dajax.json()
+  dajax = Dajax()
+  dajax.script('window.location=\''+reverse('project:project_detail', args=[project.pk])+'\'')
+  return dajax.json()
 
 @dajaxice_register
 def add_core_to_club( request, **kwargs):

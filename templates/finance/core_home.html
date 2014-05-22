@@ -1,0 +1,41 @@
+{% extends 'finance/core_base.html' %}
+
+
+{%block html_title%}
+Finance - Home
+<div class="btn-group" style="margin-left:500px">
+	{% for y in years %}
+	<button type="button" class="btn btn-default" onclick="content_splitter('#{{y}}')">{{y}}</button>
+	{% endfor %}
+</div>
+{% endblock %}
+
+
+{% block content %}
+{% for y in years %}
+<div id="{{y}}" class="content_divs {% if y == least %}first_con_div{% endif %}">
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">{{y}}</h4>
+	<table class="table table-striped table-bordered table-condensed">
+		<tr>
+			<th>Project</th>
+			<th>Total Budget</th>
+			<th>Utilized Budget</th>
+			<th>Remaining Budget</th>
+			<th>Dues</th>
+		</tr>
+		{% for p in projects %}
+		{% if p.project.year == y %}
+		<tr>
+			<td>{{p.project.name}}</td>
+			<td>{{p.total_budget}}</td>
+			<td>{{p.util_budget}}</td>
+			<td>{{p.rem_budget}}</td>
+			<td>{{p.due}}</td>
+		</tr>
+		{% endif %}
+		{% endfor %}
+	</table>
+</div>
+{% endfor %}
+
+{% endblock %}

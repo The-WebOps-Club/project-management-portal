@@ -1,3 +1,9 @@
 from django.contrib import admin
+from finance.models import *
 
-# Register your models here.
+admin.site.register(Advance)
+admin.site.register(Reimbursement)
+admin.site.register(Bill)
+admin.site.register(BudgetInfo)
+admin.site.register(Installment)
+admin.site.register(Collection)

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block head %}
+<script type="text/javascript" src={% static 'finance.js' %}></script>
+<link rel="stylesheet" type="text/css" href="{% static 'finance.css' %}">
+{% endblock %}
+
+
+{% block left_pane %}
+<ul>
+	<li class="heading"><span>Finance</span></li>
+	<li class="hasSubmenu glyphicons stats">
+		<a href="{% url 'finance:project_info' project.id %}">Info</a>
+	</li>
+	<li class="hasSubmenu glyphicons briefcase">
+		<a href="{% url 'finance:project_advance' project.id %}">Advances</a>
+	</li>
+	<li class="hasSubmenu glyphicons usd">
+		<a href="{% url 'finance:project_reimbursement' project.id %}">Reimbursements</a>
+	</li>
+</ul>
+{% endblock %}

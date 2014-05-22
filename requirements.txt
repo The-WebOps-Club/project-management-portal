@@ -1,6 +1,5 @@
 Django==1.6
-South==0.7.3
-PIL
+South
 django-dajaxice
 django-dajax
 django-registration

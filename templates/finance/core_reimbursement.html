@@ -1,0 +1,125 @@
+{% extends 'finance/core_base.html' %}
+
+
+{%block html_title%}
+Reimbursements
+<div class="btn-group" style="margin-left:530px">
+	<button type="button" class="btn btn-default" onclick="content_splitter('#core_pending')">New Requests</button>
+ 	<button type="button" class="btn btn-default" onclick="content_splitter('#core_approved')">Approved Requests</button>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+{%  if form_fail_i %}
+	$(document).ready(function() {
+		show_split('#new_ins_form');
+	});
+{% endif %}
+{%  if post %}
+	$(document).ready(function() {
+		location.reload();
+	});
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+<div id="dimmer" onclick="hide_split()"></div> <!--DO NOT REMOVE-->
+
+<div id="new_ins_form" class="split_up_div">
+	<form name="new_bill_form" enctype="multipart/form-data" class="form-horizontal" id='new_bill_form' action="." method=post>
+	{%csrf_token%}
+	<input type="hidden" name="form_type" value="new_ins">
+		<div id="request_div_ins">
+		<h4 style="text-align:center;color:#37a6cd">+Installment</h4>
+		{{new_ins_form.as_p}}
+		</div>
+		<h4 style="text-align:center;"><input type="submit" value="Request" class="btn btn-primary"></h4>
+	</form>
+</div>
+
+{% for a in pending %}
+<div id="adv_split_{{a.0.id}}" class="split_up_div">
+	{{a.0.split_up|safe}}
+</div>
+{% endfor %}
+
+{% for a in approved %}
+<div id="adv_split_{{a.0.id}}" class="split_up_div">
+	{{a.0.split_up|safe}}
+</div>
+<div id="adv_ins_{{a.0.id}}" class="split_up_div">
+	<h4 style="text-align:center;color:#37a6cd">Total : {{a.0.received}}</h4>
+	<div>{{a.0.ins_as_table|safe}}</div>
+	<h5 style="margin:0px;margin-bottom:10px;text-align:center"><a href="#advance_{{a.0.id}}" onclick="new_installment({{a.0.id}})">+Add Installment</a></h5>
+</div>
+{% endfor %}
+
+<div id="core_pending" class="content_divs first_con_div">
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">Pending Approval</h4>
+	<form action="." method=post id="pending_formset">
+	<input type="hidden" name="form_type" value="pending">
+	{% csrf_token %}
+	{{p_data}}
+		<table class="table table-striped table-bordered table-condensed data_tables" enctype="multipart/form-data" class="form-horizontal" id="core_approval_table">
+			<tr>
+				<th>Project</th>
+				<th>Applied Date</th>
+				<th>Amount</th>
+				<th>Status</th>
+				<th>Comment</th>
+				<th>Bills</th>
+			</tr>
+			{% for a in pending %}
+			<tr>
+				<td>{{a.0.project.name}}</td>
+				<td>{{a.0.applied_date}}</td>
+				<td>{{a.0.amount}}</td>
+				<td>{{a.1.is_app_core}}</td>
+				<td>{{a.1.comments}}</td>
+				<td><a href="{% url 'finance:project_bill' a.0.project.id 'reimbursement' a.0.id %}" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a></td>
+				{{a.1.id}}{{a.1.project}}{{a.1.is_app_mentor}}				
+			</tr>			
+			{% endfor %}
+		</table>
+		<div id="hidden_form" style="display:none">{{p_extra}}</div>
+		<h3 style="text-align:center"><input type="submit" value="Save" class="btn btn-primary"></h3>
+	</form>
+</div>
+
+<div id="core_approved" class="content_divs">
+	<h4 style="text-align:center;color:#37a6cd;margin:10px">Approved Reimbursements</h4>
+	<form action="." method=post id="approved_formset">
+	<input type="hidden" name="form_type" value="approved">
+	{% csrf_token %}
+	{{a_data}}
+		<table class="table table-striped table-bordered table-condensed data_tables" enctype="multipart/form-data" class="form-horizontal" id="core_approval_table">
+			<tr>
+				<th>Project</th>
+				<th>Applied Date</th>
+				<th>Amount</th>
+				<th>Approved Date</th>
+				<th>Received</th>
+				<th>Comment</th>
+				<th>Bills</th>
+			</tr>
+			{% for a in approved %}
+			<tr id="#advance_{{a.0.id}}">
+				<td>{{a.0.project.name}}</td>
+				<td>{{a.0.applied_date}}</td>
+				<td>{{a.0.amount}}</td>
+				<td>{{a.0.approved_date}}</td>
+				<td><a href="#advance_{{a.0.id}}" onclick="show_split('#adv_ins_{{a.0.id}}')">{{a.0.received}}</a></td>
+				<td>{{a.1.comments}}</td>
+				<td><a href="{% url 'finance:project_bill' a.0.project.id 'reimbursement' a.0.id %}" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a></td>
+				{{a.1.id}}{{a.1.project}}{{a.1.split_up}}{{a.1.amount}}				
+			</tr>			
+			{% endfor %}
+		</table>
+		<div id="hidden_form" style="display:none">{{a_extra}}</div>
+		<h3 style="text-align:center"><input type="submit" value="Save" class="btn btn-primary"></h3>
+	</form>
+</div>
+
+{%endblock%}

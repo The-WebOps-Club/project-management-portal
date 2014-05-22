@@ -1,14 +1,5 @@
 {%extends 'base.html'%}
 
-{% block scripts %}
-	/*$(document).ready(function(){
-		if({{decide}}) {
-			Dajaxice.userprofile.get_profile(Dajax.process, {'form1': {{form}},});
-		}
-		else Dajaxice.userprofile.get_profile(Dajax.process);
-	})*/
-{% endblock %}
-
 {%block html_title%}
 	Edit Account
 {%endblock%}
@@ -16,8 +7,11 @@
 {%block content %}
 	
 	<div id="UpdateDiv">
+		{% if no_profile %}
+		<h5 style="color:red">*Other features of the portal will not work before you fill out your profile</h5>
+		{% endif %}
 		<form name="updateForm" enctype="multipart/form-data" class="form-horizontal" id='profile-form' action="/account/upload/" method=post>
-		{%csrf_token%}	
+		{% csrf_token %}	
 			{{form.as_ul}}
 			<input type="submit" value="Save Changes" class="btn btn-primary">
 		</form>

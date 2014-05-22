@@ -15,7 +15,7 @@ class UserProfileForm(forms.ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		super(UserProfileForm, self).__init__(*args, **kwargs)
-		self.fields.keyOrder = ['first_name', 'last_name', 'ph_num', 'hostel', 'room', 'expertise', 
+		self.fields.keyOrder = ['first_name', 'last_name', 'ph_num', 'roll_num', 'hostel', 'room', 'expertise', 
 			'social_media_URL', 'description', 'pic']
 
 class ChangePasswordForm(forms.Form):

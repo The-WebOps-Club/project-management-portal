@@ -5,17 +5,21 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from userprofile.ajax import get_profile
 from project.models import Club
+from p_manage.settings import SITE_URL
 
 club_list = Club.objects.all()
 
 @login_required
 def account(request):
-	try:
+	ar = UserProfile.objects.filter(user=request.user)
+	if ar.count() == 0:
+		no_profile = True
+		form1 = UserProfileForm(initial = {'first_name': request.user.first_name, 'last_name': request.user.last_name})	
+	else:	
+		no_profile = False
 		user1 = UserProfile.objects.get(user = request.user)
 		form1 = UserProfileForm(instance = user1, initial = {'first_name': user1.user.first_name, 'last_name': user1.user.last_name})
-	except:
-		form1 = UserProfileForm(initial = {'first_name': request.user.first_name, 'last_name': request.user.last_name})	
-	cd1 = {'form': form1, 'user': request.user, 'club_list': club_list}
+	cd1 = {'form': form1, 'user': request.user, 'club_list': club_list, 'no_profile': no_profile}
 	return render(request, 'user/edit_account.html', cd1)
 
 def test(request):
@@ -57,11 +61,11 @@ def upload(request):
 			u.first_name = form2.cleaned_data['first_name']
 			u.last_name = form2.cleaned_data['last_name']
 			u.save()
-			return HttpResponseRedirect('/account/user/')
+			return HttpResponseRedirect(SITE_URL+'account/user/')
 	else:
-	 	HttpResponseRedirect('/account/user/')
+	 	HttpResponseRedirect(SITE_URL+'account/user/')
 
-
+	 	
 @login_required
 def core_dashboard( request ):
 	# permission checking here.
