@@ -65,7 +65,7 @@ def upload(request):
 	else:
 	 	HttpResponseRedirect(SITE_URL+'account/user/')
 
-
+	 	
 @login_required
 def core_dashboard( request ):
 	# permission checking here.
