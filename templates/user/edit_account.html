@@ -4,13 +4,24 @@
 	Edit Account
 {%endblock%}
 
+
+{% block scripts %}
+
+function check_ph() {
+	if ($('#id_ph_num').val().length != 10) { alert('Input a 10-digit phone number'); return false; }
+	else return true;
+}
+
+{% endblock %}
+
+
 {%block content %}
 	
 	<div id="UpdateDiv">
 		{% if no_profile %}
 		<h5 style="color:red">*Other features of the portal will not work before you fill out your profile</h5>
 		{% endif %}
-		<form name="updateForm" enctype="multipart/form-data" class="form-horizontal" id='profile-form' action="/account/upload/" method=post>
+		<form name="updateForm" enctype="multipart/form-data" class="form-horizontal" id='profile-form' action="/account/upload/" onsubmit="return check_ph()" method=post>
 		{% csrf_token %}	
 			{{form.as_ul}}
 			<input type="submit" value="Save Changes" class="btn btn-primary">

@@ -25,9 +25,7 @@
 	});
 {% endif %}
 {%  if post %}
-	$(document).ready(function() {
-		location.reload();
-	});
+	location.reload();
 {% endif %}
 
 {% endblock %}
@@ -78,6 +76,7 @@
 				<th>Amount</th>
 				<th>Date</th>
 				<th>Soft Copy</th>
+				<th>Delete</th>
 			<tr>
 			{% for bill in col.bills.all %}
 			<tr id="bill_{{bill.id}}">
@@ -86,6 +85,7 @@
 				<td>{{bill.amount}}</td>
 				<td>{{bill.date}}</td>
 				<td><a href="#" onclick="show_split('#soft_bill_{{bill.id}}')"><span class="btn btn-sm btn-info">View</span></a></td>
+				<td><a onclick="delete_bill('{% url 'finance:delete_bill' 'bill' bill.id %}')"><span class="glyphicon glyphicon-remove"></span></a></td>
 			</tr>
 			{% endfor %}
 		</table>
@@ -93,7 +93,7 @@
 	{% endif %}
 	<h5 style="margin:0px;margin-bottom:10px;text-align:center"><a href="#add_bill" onclick="show_split('#add_bill_form')">+Add Bills</a></h5>
 	{% if not no_bills %}
-	<h3 style="text-align:center"><a href="{% url 'finance:project_reimbursement_save' project.id col.id %}"><button class="btn btn-primary">Save & Send</button></a></h3>
+	<h3 style="text-align:center"><a href="{% url 'finance:project_reimbursement_save' project.id col.id %}"><button class="btn btn-primary">Save & Send</button></a><button class="btn btn-danger" onclick="delete_bill('{% url 'finance:delete_bill' 'col' col.id %}')">Delete</button></h3>
 	{% endif %}
 </div>
 

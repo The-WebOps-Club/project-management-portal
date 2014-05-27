@@ -12,4 +12,6 @@ urlpatterns = patterns('',
 	url(r'^core/reimbursement/$', 'finance.views.core_reimb', name='core_reimbursement'),
 	url(r'^core/$', 'finance.views.core_home', name='core_home'),
 
+	url(r'^delete/(?P<objects>[a-z]+)/(?P<object_id>\d+)/$', 'finance.views.delete_bill', name='delete_bill')
+
 )

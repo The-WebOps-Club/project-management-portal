@@ -3,7 +3,7 @@ from finance.models import *
 from finance.forms import *
 from project.models import Project
 from userprofile.models import UserProfile
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.forms import HiddenInput
 from datetime import date
@@ -304,3 +304,16 @@ def project_bills(request, project_id, objects, object_id):
 	cd['bill_fail'] = bill_fail
 	cd['post'] = post
 	return render(request, 'finance/bills.html', cd)
+
+def delete_bill(request, objects, object_id):
+	if objects == 'bill':
+		b = Bill.objects.get(id=object_id)
+		b.delete()
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+	elif objects == 'col':
+		c = Collection.objects.get(id=object_id)
+		c.delete()
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER')[:-2])
+	else:
+		raise Http404
+	

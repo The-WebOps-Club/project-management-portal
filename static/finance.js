@@ -48,6 +48,14 @@ function content_splitter(string) {
 	$(string).show();
 }
 
+function delete_bill(string) {
+	r = confirm('Are you sure you want to delete it?');
+	if (r == true) {
+		window.location.replace(string);
+	}
+	else return false;
+}
+
 $(document).keyup(function(e) {
   if (e.keyCode == 27 && is_dim == true) hide_split() 
 });

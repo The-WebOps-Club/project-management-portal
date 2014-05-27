@@ -10,9 +10,7 @@
 	});
 {% endif %}
 {%  if post %}
-	$(document).ready(function() {
-		location.reload();
-	});
+	location.reload();
 {% endif %}
 
 {% endblock %}
@@ -91,7 +89,7 @@
 				</td>
 				<td>{{ob.approved_date}}</td>
 				<td>{{ob.received}}</td>
-				<td>{{ob.comments}}</td>
+				<td>{{ob.comments}}</td>				
 			</tr>
 		</table>	
 	</div>
@@ -108,6 +106,9 @@
 			<th>Amount</th>
 			<th>Date</th>
 			<th>Soft Copy</th>
+			{% if objects == "advance" %}
+			<th>Delete</th>
+			{% endif %}
 		<tr>
 		{% for bill in ob.bills.all %}
 		<tr id="bill_{{bill.id}}">
@@ -116,6 +117,9 @@
 			<td>{{bill.amount}}</td>
 			<td>{{bill.date}}</td>
 			<td><a onclick="show_split('#soft_bill_{{bill.id}}')"><span class="btn btn-xs btn-info">View</span></a></td>
+			{% if objects == "advance" %}
+			<td><a onclick="delete_bill('{% url 'finance:delete_bill' 'bill' bill.id %}')"><span class="glyphicon glyphicon-remove"></span></a></td>
+			{% endif %}
 		</tr>
 		{% endfor %}
 	</table>
